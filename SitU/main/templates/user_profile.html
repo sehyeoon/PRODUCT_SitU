@@ -1,0 +1,7 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+    <h2>프로필</h2>
+    <p>이름: {{ user.username }}</p>
+    <p>전화번호: {{ user.phone_number }}</p>
+</div>
+{% endblock %}

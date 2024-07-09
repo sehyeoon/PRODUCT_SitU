@@ -1,0 +1,102 @@
+body {
+    font-family: 'Pretendard', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+.container {
+    padding: 20px;
+}
+
+h1,
+h2,
+h3 {
+    color: #333333;
+}
+
+button,
+.btn {
+    background-color: #ff8244;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+button.btn-block {
+    width: 100%;
+}
+
+button.btn-outline-primary {
+    background-color: transparent;
+    color: #ff8244;
+    border: 2px solid #ff8244;
+}
+
+button.btn-outline-primary:hover {
+    background-color: #ff8244;
+    color: white;
+}
+
+.navbar-bottom {
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #ff8244;
+    border-top: 1px solid #dee2e6;
+}
+
+.navbar-bottom .nav-item {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.navbar-bottom .nav-link {
+    color: white;
+    font-size: 14px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff8244;
+}
+
+.card-text {
+    color: #333333;
+}
+
+.btn-primary {
+    background-color: #333333;
+    color: white;
+}
+
+.square-button {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

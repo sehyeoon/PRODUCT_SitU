@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+    <h2>검색</h2>
+    <form method="get" action="{% url 'search' %}">
+        <input type="text" name="q" value="{{ query }}" placeholder="카페 이름 또는 주소를 입력하세요" />
+        <button type="submit" class="btn btn-primary">검색</button>
+    </form>
+    <ul>
+        {% for cafe in cafes %}
+        <li><a href="{% url 'cafe_detail' cafe.id %}">{{ cafe.name }}</a> - {{ cafe.address }}</li>
+        {% empty %}
+        <li>검색 결과가 없습니다.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

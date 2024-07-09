@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+    <h1 class="mt-4">어디로 가시나요?</h1>
+    <h2 class="mb-4"><span id="current-location">안암동</span> 카페찾기</h2>
+
+    <div class="row mb-4">
+        <div class="col-6 col-md-3 mb-3">
+            <button class="btn btn-primary btn-block square-button">전체보기</button>
+        </div>
+        {% for area in areas %}
+        <div class="col-6 col-md-3 mb-3">
+            <button class="btn btn-outline-primary btn-block square-button">{{ area }}</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h3 class="mb-3">내 주변 3km 지금 빈자리 있는 카페</h3>
+    <div id="nearby-cafes">
+        {% for cafe in nearby_cafes %}
+        <div class="card mb-3">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img src="{{ cafe.photo.url }}" class="card-img" alt="{{ cafe.name }}" />
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ cafe.name }} <small>{{ cafe.distance }}km</small></h5>
+                        <p class="card-text">
+                            {{ cafe.opening_hours }}<br />
+                            잔여석: {{ cafe.available_seats }}
+                        </p>
+                        <a href="{% url 'cafe_detail' cafe.id %}" class="btn btn-sm btn-primary">자리잡기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>주변에 빈자리 있는 카페가 없습니다.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
