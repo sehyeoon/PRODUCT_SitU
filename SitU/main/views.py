@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from .models import User, Cafe, Seat, Favorite, Reservation
 from .forms import UserSignupForm
 from django.db.models import Q
+from django.contrib import messages
+from django.http import JsonResponse
 
 def home(request):
     areas = ['정후', '참살이', '정문', '제기동', '개운사길', '옆살이', '이공계']
@@ -31,7 +33,11 @@ def search(request):
         cafes = Cafe.objects.all()
     return render(request, 'search.html', {'cafes': cafes, 'query': query})
 
-
+def ajax_search(request):
+    query = request.GET.get('q', '')
+    cafes = Cafe.objects.filter(name__icontains=query) | Cafe.objects.filter(address__icontains=query)
+    results = [{'id': cafe.id, 'name': cafe.name, 'address': cafe.address} for cafe in cafes]
+    return JsonResponse(results, safe=False)
 
 @login_required
 def user_likes(request, user_id):
@@ -40,30 +46,46 @@ def user_likes(request, user_id):
     return render(request, 'user_likes.html', {'likes': likes})
 
 def user_profile(request, user_id):
+    if user_id == 0:
+        return redirect('user_login')
     user = get_object_or_404(User, id=user_id)
     return render(request, 'user_profile.html', {'user': user})
 
 def user_signup(request):
     if request.method == 'POST':
-        form = UserSignupForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.set_password(user.password)
-            user.save()
-            login(request, user)
-            return redirect('home')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        name = request.POST.get('name')
+        phone_number = request.POST.get('phone')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, '이미 사용 중인 아이디입니다.')
+            return redirect('user_signup')
+
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+            first_name=name,
+            phone_number=phone_number
+        )
+        user.save()
+        login(request, user)
+        return redirect('home')
     else:
-        form = UserSignupForm()
-    return render(request, 'user_signup.html', {'form': form})
+        return render(request, 'user_signup.html')
+
+
 
 def user_login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
+            return redirect('home')  # 로그인 성공 시 홈페이지로 리디렉션
+        else:
+            messages.error(request, '아이디 또는 비밀번호가 올바르지 않습니다.')
     return render(request, 'user_login.html')
 
 @login_required

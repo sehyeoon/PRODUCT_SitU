@@ -13,28 +13,32 @@
         <link rel="stylesheet" href="{% static 'style.css' %}" />
     </head>
     <body>
-        <div class="container mt-4">{% block content %} {% endblock %}</div>
+        <div class="container mt-4 screen">{% block content %} {% endblock %}</div>
 
         <nav class="navbar navbar-bottom navbar-light">
-            <div class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">홈</a>
-            </div>
-            <div class="nav-item">
-                <a class="nav-link" href="{% url 'search' %}">검색</a>
-            </div>
-            <div class="nav-item">
-                {% if user.is_authenticated %}
-                <a class="nav-link" href="{% url 'user_likes' user.id %}">관심&즐겨찾기</a>
-                {% else %}
-                <a class="nav-link" href="{% url 'user_signup' %}">관심&즐겨찾기</a>
-                {% endif %}
-            </div>
-            <div class="nav-item">
-                {% if user.is_authenticated %}
-                <a class="nav-link" href="{% url 'user_profile' user.id %}">마이</a>
-                {% else %}
-                <a class="nav-link" href="{% url 'user_signup' %}">마이</a>
-                {% endif %}
+            <div class="container navbar-container">
+                <div class="row w-100">
+                    <div class="nav-item col text-center">
+                        <a class="nav-link" href="{% url 'home' %}">홈</a>
+                    </div>
+                    <div class="nav-item col text-center">
+                        <a class="nav-link" href="{% url 'search' %}">검색</a>
+                    </div>
+                    <div class="nav-item col text-center">
+                        {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'user_likes' user.id %}">관심&즐겨찾기</a>
+                        {% else %}
+                        <a class="nav-link" href="{% url 'user_profile' 0 %}">관심&즐겨찾기</a>
+                        {% endif %}
+                    </div>
+                    <div class="nav-item col text-center">
+                        {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'user_profile' user.id %}">마이</a>
+                        {% else %}
+                        <a class="nav-link" href="{% url 'user_profile' 0 %}">마이</a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </nav>
     </body>

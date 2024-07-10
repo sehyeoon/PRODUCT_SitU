@@ -1,102 +1,103 @@
+:root {
+    --primary-color: #ff8244;
+    --secondary-color: #333333;
+}
+
 body {
     font-family: 'Pretendard', sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    background-color: #fff;
+    background-color: white;
+    color: var(--secondary-color);
+    letter-spacing: -0.05rem;
 }
 
-.container {
-    padding: 20px;
-}
-
-h1,
-h2,
-h3 {
-    color: #333333;
-}
-
-button,
-.btn {
-    background-color: #ff8244;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
-}
-
-button.btn-block {
-    width: 100%;
-}
-
-button.btn-outline-primary {
-    background-color: transparent;
-    color: #ff8244;
-    border: 2px solid #ff8244;
-}
-
-button.btn-outline-primary:hover {
-    background-color: #ff8244;
-    color: white;
-}
-
+/* 네비게이션 바 스타일 수정 */
 .navbar-bottom {
-    display: flex;
-    justify-content: space-around;
+    background-color: var(--primary-color);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: #ff8244;
-    border-top: 1px solid #dee2e6;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-.navbar-bottom .nav-item {
-    flex-grow: 1;
-    text-align: center;
-}
-
-.navbar-bottom .nav-link {
-    color: white;
-    font-size: 14px;
-}
-
-.card {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    overflow: hidden;
-}
-
-.card img {
-    width: 100%;
-    height: auto;
-}
-
-.card-body {
-    padding: 15px;
-}
-
-.card-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #ff8244;
-}
-
-.card-text {
-    color: #333333;
-}
-
-.btn-primary {
-    background-color: #333333;
-    color: white;
-}
-
-.square-button {
-    aspect-ratio: 1 / 1;
+.navbar-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    width: 100%;
+    height: fit-content;
+}
+
+.nav-item {
+    flex: 1;
     text-align: center;
+    white-space: nowrap;
+}
+
+.nav-link {
+    color: #ffffff;
+    font-size: 0.9rem;
+    text-decoration: none;
+    font-weight: 400; /* Pretendard Regular */
+}
+
+.group,
+.overlap-wrapper,
+.group-wrapper {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-weight: 400;
+}
+
+.group:hover,
+.overlap-wrapper:hover,
+.group-wrapper:hover {
+    background-color: #e66a2e; /* 약간 어두운 shade */
+}
+
+.text-wrapper {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.text-wrapper-2 {
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+/* 입력 필드 스타일 수정 */
+.rectangle,
+.rectangle-2 {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+input[type='text'],
+input[type='password'] {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+/* 추가: 포커스 시 스타일 */
+input[type='text']:focus,
+input[type='password']:focus {
+    border-color: var(--primary-color);
 }

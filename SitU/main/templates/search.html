@@ -1,16 +1,57 @@
-{% extends 'base.html' %} {% block content %}
-<div class="container">
-    <h2>검색</h2>
-    <form method="get" action="{% url 'search' %}">
-        <input type="text" name="q" value="{{ query }}" placeholder="카페 이름 또는 주소를 입력하세요" />
-        <button type="submit" class="btn btn-primary">검색</button>
-    </form>
-    <ul>
-        {% for cafe in cafes %}
-        <li><a href="{% url 'cafe_detail' cafe.id %}">{{ cafe.name }}</a> - {{ cafe.address }}</li>
-        {% empty %}
-        <li>검색 결과가 없습니다.</li>
-        {% endfor %}
-    </ul>
+{% extends 'base.html' %}{% load static %} {% block content %}
+
+<link rel="stylesheet" href="{% static 'search.css' %}" />
+
+<div class="screen">
+    <div class="div">
+        <div class="frame">
+            <form method="get" action="{% url 'search' %}">
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ query }}"
+                    placeholder="카페 이름 또는 주소로 검색하기"
+                    id="search-input"
+                />
+            </form>
+            <ul id="results-list">
+                {% for cafe in cafes %}
+                <li><a href="{% url 'cafe_detail' cafe.id %}">{{ cafe.name }}</a> - {{ cafe.address }}</li>
+                {% empty %}
+                <li>검색 결과가 없습니다.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#search-input').on('input', function () {
+            var query = $(this).val();
+            $.ajax({
+                url: "{% url 'ajax_search' %}",
+                data: {
+                    q: query,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var resultsList = $('#results-list');
+                    resultsList.empty();
+                    if (data.length > 0) {
+                        data.forEach(function (cafe) {
+                            resultsList.append(
+                                '<li><a href="/cafe/' + cafe.id + '/">' + cafe.name + '</a> - ' + cafe.address + '</li>'
+                            );
+                        });
+                    } else {
+                        resultsList.append('<li>검색 결과가 없습니다.</li>');
+                    }
+                },
+            });
+        });
+    });
+</script>
+
 {% endblock %}

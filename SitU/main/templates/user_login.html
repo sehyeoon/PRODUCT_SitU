@@ -1,9 +1,37 @@
-{% extends 'base.html' %} {% block content %}
-<div class="container">
-    <h2>회원가입</h2>
-    <form method="post">
-        {% csrf_token %} {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">가입하기</button>
-    </form>
+{% extends 'base.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'user_login.css' %}" />
+
+<div class="screen">
+    <div class="div">
+        <div class="overlap">
+            <div class="text-wrapper">SitU</div>
+            <div class="text-wrapper-2">당신을 위해 남겨둔 자리</div>
+        </div>
+        <form method="post" action="{% url 'user_login' %}">
+            {% csrf_token %}
+            <div class="rectangle">
+                <input type="text" name="username" placeholder="아이디" required />
+            </div>
+            <div class="rectangle-2">
+                <input type="password" name="password" placeholder="비밀번호" required />
+            </div>
+            <button type="submit" class="group">
+                <div class="overlap-group">
+                    <div class="text-wrapper-3">로그인하기</div>
+                </div>
+            </button>
+        </form>
+
+        <a href="{% url 'home' %}" class="group-wrapper">
+            <div class="div-wrapper">
+                <div class="text-wrapper-5">비회원으로 이용하기</div>
+            </div>
+        </a>
+        <a href="{% url 'user_signup' %}" class="overlap-wrapper">
+            <div class="overlap-group">
+                <div class="text-wrapper-4">회원가입하기</div>
+            </div>
+        </a>
+    </div>
 </div>
 {% endblock %}

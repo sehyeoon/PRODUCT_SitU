@@ -1,0 +1,12 @@
+button {
+    width: 100%;
+}
+
+.div {
+    max-width: 320px;
+}
+
+.screen {
+    display: flex;
+    justify-content: center;
+}

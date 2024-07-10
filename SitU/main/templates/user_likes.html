@@ -1,15 +1,21 @@
-{% extends 'base.html' %} {% block content %}
-<div class="container">
-    <h2>관심&즐겨찾기</h2>
-    <ul>
-        {% for favorite in likes %}
-        <li>
-            <a href="{% url 'cafe_detail' favorite.cafe.id %}">{{ favorite.cafe.name }}</a> - {{ favorite.cafe.address
-            }}
-        </li>
-        {% empty %}
-        <li>관심&즐겨찾기 한 카페가 없습니다.</li>
-        {% endfor %}
-    </ul>
+{% extends 'base.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'user_likes.css' %}" />
+<div class="screen">
+    <div class="div">
+        <div class="frame">
+            <h2>관심&즐겨찾기</h2>
+            <p class="username">{{ request.user.username }}님</p>
+            <ul>
+                {% for favorite in likes %}
+                <li>
+                    <a href="{% url 'cafe_detail' favorite.cafe.id %}">{{ favorite.cafe.name }}</a> - {{
+                    favorite.cafe.address }}
+                </li>
+                {% empty %}
+                <li>관심&즐겨찾기 한 카페가 없습니다.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 </div>
 {% endblock %}
