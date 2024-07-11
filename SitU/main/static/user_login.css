@@ -74,3 +74,17 @@ a.group-wrapper:hover {
 .div {
     max-width: 320px;
 }
+
+.error-messages {
+    background-color: #ffebee;
+    border: 1px solid #ffcdd2;
+    border-radius: 4px;
+    color: #b71c1c;
+    margin-bottom: 15px;
+    padding: 10px;
+    text-align: center;
+}
+
+.error-messages p {
+    margin: 0;
+}

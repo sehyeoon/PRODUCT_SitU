@@ -57,7 +57,11 @@ def user_signup(request):
         password = request.POST.get('password')
         name = request.POST.get('name')
         phone_number = request.POST.get('phone')
+        agree = request.POST.get('agree')
 
+        if not agree:
+            messages.error(request, '개인정보 수집 및 이용에 동의하셔야 합니다.')
+            return redirect('user_signup')
         if User.objects.filter(username=username).exists():
             messages.error(request, '이미 사용 중인 아이디입니다.')
             return redirect('user_signup')
@@ -85,7 +89,11 @@ def user_login(request):
             login(request, user)
             return redirect('home')  # 로그인 성공 시 홈페이지로 리디렉션
         else:
-            messages.error(request, '아이디 또는 비밀번호가 올바르지 않습니다.')
+            # 사용자 존재 여부 확인
+            if User.objects.filter(username=username).exists():
+                messages.error(request, '비밀번호를 잘못 입력했습니다.')
+            else:
+                messages.error(request, '등록되지 않은 ID입니다.')
     return render(request, 'user_login.html')
 
 @login_required

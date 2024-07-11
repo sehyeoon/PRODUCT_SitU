@@ -35,10 +35,10 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-size: 1rem;
+    font-size: 1.2rem;
     margin: 0px;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 700;
 }
 
 .square-button.btn-primary {

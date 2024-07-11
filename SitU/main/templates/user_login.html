@@ -1,4 +1,10 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
 <link rel="stylesheet" href="{% static 'user_login.css' %}" />
 
 <div class="screen">
@@ -7,6 +13,13 @@
             <div class="text-wrapper">SitU</div>
             <div class="text-wrapper-2">당신을 위해 남겨둔 자리</div>
         </div>
+        {% if messages %}
+        <div class="error-messages">
+            {% for message in messages %}
+            <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
         <form method="post" action="{% url 'user_login' %}">
             {% csrf_token %}
             <div class="rectangle">
@@ -21,7 +34,7 @@
                 </div>
             </button>
         </form>
-
+        
         <a href="{% url 'home' %}" class="group-wrapper">
             <div class="div-wrapper">
                 <div class="text-wrapper-5">비회원으로 이용하기</div>

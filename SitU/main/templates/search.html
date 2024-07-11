@@ -5,7 +5,10 @@
 <div class="screen">
     <div class="div">
         <div class="frame">
-            <form method="get" action="{% url 'search' %}">
+            <form method="get" action="{% url 'search' %}" class="search-form">
+                <div class="search-icon-container">
+                    <img src="{% static 'search.png' %}" class="search-icon" />
+                </div>
                 <input
                     type="text"
                     name="q"
