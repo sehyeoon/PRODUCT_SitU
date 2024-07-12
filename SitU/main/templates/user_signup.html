@@ -1,11 +1,14 @@
+<!-- user_signup.html -->
+
 {% extends 'base.html' %} {% load static %} {% block navbar %} {% endblock %} {% block content %}
+
 <link rel="stylesheet" href="{% static 'user_signup.css' %}" />
 <div class="screen">
     <div class="signup-container">
         <h1 class="title">SitU에 오신 걸 환영합니다</h1>
         <h2 class="subtitle">회원가입</h2>
         <div class="separator"></div>
-        <form method="post" action="{% url 'user_signup' %}" onsubmit="return checkForm()">
+        <form method="post" action="{% url 'signup' %}" onsubmit="return checkForm()">
             {% csrf_token %}
             <div class="input-group">
                 <label for="name">이름</label>

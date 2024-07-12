@@ -1,0 +1,27 @@
+<!-- social_signup.html -->
+
+{% extends 'base.html' %} {% load static %} {% block navbar %} {% endblock %} {% block content %}
+
+<link rel="stylesheet" href="{% static 'user_signup.css' %}" />
+<div class="screen">
+    <div class="signup-container">
+        <h1 class="title">SitU에 오신 걸 환영합니다</h1>
+        <h2 class="subtitle">회원가입</h2>
+        <div class="separator"></div>
+        <form method="post" action="{% url 'social_signup' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="name">이름</label>
+                <input id="name" name="name" placeholder="이름을 입력하세요" required />
+            </div>
+            <div class="input-group">
+                <label for="phone">전화번호</label>
+                <input id="phone" name="phone" placeholder="전화번호를 입력하세요" required />
+            </div>
+            <div class="separator"></div>
+            <button type="submit" class="signup-button">회원가입하기</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

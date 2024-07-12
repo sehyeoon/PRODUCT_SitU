@@ -2,10 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .models import User, Cafe, Seat, Favorite, Reservation
-from .forms import UserSignupForm
 from django.db.models import Q
 from django.contrib import messages
 from django.http import JsonResponse
+from allauth.socialaccount.models import SocialAccount
+from django.urls import reverse
+from allauth.account.views import SignupView
 
 def home(request):
     areas = ['정후', '참살이', '정문', '제기동', '개운사길', '옆살이', '이공계']
@@ -78,8 +80,21 @@ def user_signup(request):
     else:
         return render(request, 'user_signup.html')
 
+def social_signup(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        phone_number = request.POST.get('phone')
 
+        # 현재 로그인된 사용자 가져오기
+        user = request.user
+        user.first_name = name
+        user.phone_number = phone_number
+        user.save()
 
+        return redirect('home')
+    else:
+        return render(request, 'social_signup.html')
+    
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -112,11 +127,3 @@ def reservation_create(request):
 def reservation_detail(request, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
     return render(request, 'reservation_detail.html', {'reservation': reservation})
-
-def search(request):
-    query = request.GET.get('q', '')
-    if query:
-        cafes = Cafe.objects.filter(Q(name__icontains=query) | Q(address__icontains=query))
-    else:
-        cafes = Cafe.objects.all()
-    return render(request, 'search.html', {'cafes': cafes, 'query': query})
