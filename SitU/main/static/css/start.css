@@ -1,0 +1,51 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 스크롤 방지 */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ff8244;
+    color: white;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ff8244;
+    transition: opacity 1.5s ease-in-out;
+    z-index: -1;
+}
+
+.container {
+    text-align: center;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.title {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 800; /* Extrabold */
+    font-size: 6rem;
+    margin-bottom: 0px;
+}
+
+.subtitle {
+    margin: 0px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400; /* Regular */
+    font-size: 2rem;
+}
+
+.fade-out .background-overlay,
+.fade-out .container {
+    opacity: 0;
+}

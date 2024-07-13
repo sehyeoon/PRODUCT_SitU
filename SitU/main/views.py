@@ -28,7 +28,7 @@ def cafe_region(request, region_id):
     return render(request, 'cafe_region.html', {'cafes': cafes})
 
 def search(request):
-    query = request.GET.get('q')
+    query = request.GET.get('q', '')  # 빈 문자열을 기본값으로 설정
     if query:
         cafes = Cafe.objects.filter(Q(name__icontains=query) | Q(address__icontains=query))
     else:
@@ -127,3 +127,6 @@ def reservation_create(request):
 def reservation_detail(request, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
     return render(request, 'reservation_detail.html', {'reservation': reservation})
+
+def start(request):
+    return render(request, 'start.html')

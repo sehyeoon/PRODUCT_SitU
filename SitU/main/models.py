@@ -14,6 +14,7 @@ class User(AbstractUser):
         verbose_name='groups'
     )
 
+
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         related_name='main_user_permissions_set',  # related_name 추가

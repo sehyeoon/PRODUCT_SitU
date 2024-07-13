@@ -4,8 +4,9 @@ from main import views
 from allauth.account.views import SignupView  # 기본 SignupView 사용
 
 urlpatterns = [
+    path('', views.start, name='start'),
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
+    path('home/', views.home, name='home'),
     path('cafe/<int:cafe_id>/', views.cafe_detail, name='cafe_detail'),
     path('cafe_region/<int:region_id>/', views.cafe_region, name='cafe_region'),
     path('search/', views.search, name='search'),

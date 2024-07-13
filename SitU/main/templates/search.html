@@ -1,18 +1,18 @@
 {% extends 'base.html' %}{% load static %} {% block content %}
 
-<link rel="stylesheet" href="{% static 'search.css' %}" />
+<link rel="stylesheet" href="{% static 'css/search.css' %}" />
 
 <div class="screen">
     <div class="div">
         <div class="frame">
             <form method="get" action="{% url 'search' %}" class="search-form">
                 <div class="search-icon-container">
-                    <img src="{% static 'search.png' %}" class="search-icon" />
+                    <img src="{% static 'img/search.png' %}" class="search-icon" />
                 </div>
                 <input
                     type="text"
                     name="q"
-                    value="{{ query }}"
+                    value="{{ query|default:'' }}"
                     placeholder="카페 이름 또는 주소로 검색하기"
                     id="search-input"
                 />
