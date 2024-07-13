@@ -1,13 +1,12 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth import login, logout, authenticate
+from allauth.account.views import LoginView, LogoutView
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.utils.translation import gettext as _
 from .models import User, Cafe, Seat, Favorite, Reservation
 from django.db.models import Q
-from django.contrib import messages
 from django.http import JsonResponse
-from allauth.socialaccount.models import SocialAccount
-from django.urls import reverse
-from allauth.account.views import SignupView
 
 def home(request):
     areas = ['정후', '참살이', '정문', '제기동', '개운사길', '옆살이', '이공계']
@@ -23,7 +22,6 @@ def cafe_detail(request, cafe_id):
     return render(request, 'cafe_detail.html', {'cafe': cafe})
 
 def cafe_region(request, region_id):
-    # 지역별 카페 목록 로직
     cafes = Cafe.objects.filter(region_id=region_id)
     return render(request, 'cafe_region.html', {'cafes': cafes})
 
@@ -53,7 +51,7 @@ def user_profile(request, user_id):
     user = get_object_or_404(User, id=user_id)
     return render(request, 'user_profile.html', {'user': user})
 
-def user_signup(request):
+def account_signup(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -63,10 +61,10 @@ def user_signup(request):
 
         if not agree:
             messages.error(request, '개인정보 수집 및 이용에 동의하셔야 합니다.')
-            return redirect('user_signup')
+            return redirect('account_signup')
         if User.objects.filter(username=username).exists():
             messages.error(request, '이미 사용 중인 아이디입니다.')
-            return redirect('user_signup')
+            return redirect('account_signup')
 
         user = User.objects.create_user(
             username=username,
@@ -85,7 +83,6 @@ def social_signup(request):
         name = request.POST.get('name')
         phone_number = request.POST.get('phone')
 
-        # 현재 로그인된 사용자 가져오기
         user = request.user
         user.first_name = name
         user.phone_number = phone_number
@@ -94,27 +91,15 @@ def social_signup(request):
         return redirect('home')
     else:
         return render(request, 'social_signup.html')
-    
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('home')  # 로그인 성공 시 홈페이지로 리디렉션
-        else:
-            # 사용자 존재 여부 확인
-            if User.objects.filter(username=username).exists():
-                messages.error(request, '비밀번호를 잘못 입력했습니다.')
-            else:
-                messages.error(request, '등록되지 않은 ID입니다.')
-    return render(request, 'user_login.html')
 
-@login_required
-def user_logout(request):
-    logout(request)
-    return redirect('home')
+class CustomLoginView(LoginView):
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        for error in form.errors.values():
+            messages.error(self.request, error[0])
+        return response
+class CustomLogoutView(LogoutView):
+    pass
 
 @login_required
 def reservation_create(request):
@@ -130,3 +115,20 @@ def reservation_detail(request, reservation_id):
 
 def start(request):
     return render(request, 'start.html')
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')  # 로그인 성공 시 홈페이지로 리디렉션
+        else:
+            # 사용자 존재 여부 확인
+            if User.objects.filter(username=username).exists():
+                messages.error(request, '비밀번호를 잘못 입력했습니다.', extra_tags='login_error_password')
+            else:
+                messages.error(request, '등록되지 않은 ID입니다.', extra_tags='login_error_username')
+    return render(request, 'account/login.html')  # Allauth 템플릿을 사용할 수 있습니다.
+

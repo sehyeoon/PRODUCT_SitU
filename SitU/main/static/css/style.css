@@ -150,3 +150,11 @@ input[type='password']:focus {
     height: 30px;
     margin-bottom: 5px;
 }
+
+a.nav-link {
+    padding: 0px;
+}
+
+nav.navbar.navbar-bottom.navbar-light {
+    padding: 0px;
+}

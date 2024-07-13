@@ -1,14 +1,6 @@
-<!-- user_login.html -->
+{% extends 'base.html' %} {% load static %} {% load i18n %} {% load account socialaccount %} {% block navbar %}
+{%endblock %} {% block content %}
 
-{% extends 'base.html' %}
-{% load static %}
-
-{% block navbar %}
-{% endblock %}
-
-{% block content %}
-
-{% load account socialaccount %}
 <link rel="stylesheet" href="{% static 'css/user_login.css' %}" />
 
 <div class="screen">
@@ -17,14 +9,16 @@
             <div class="text-wrapper">SitU</div>
             <div class="text-wrapper-2">당신을 위해 남겨둔 자리</div>
         </div>
-        {% if messages %}
+        {% if form.errors %}
         <div class="error-messages">
-            {% for message in messages %}
-            <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% for field in form %} {% for error in field.errors %}
+            <p class="error">{{ error }}</p>
+            {% endfor %} {% endfor %} {% for error in form.non_field_errors %}
+            <p class="error">{{ error }}</p>
             {% endfor %}
         </div>
         {% endif %}
-        <form method="post" action="{% url 'user_login' %}">
+        <form method="post" action="{% url 'account_login' %}">
             {% csrf_token %}
             <div class="rectangle">
                 <input type="text" name="username" placeholder="아이디" required />
@@ -38,13 +32,13 @@
                 </div>
             </button>
         </form>
-        
+
         <a href="{% url 'home' %}" class="group-wrapper">
             <div class="div-wrapper">
                 <div class="text-wrapper-5">비회원으로 이용하기</div>
             </div>
         </a>
-        <a href="{% url 'signup' %}" class="overlap-wrapper">  <!-- URL 이름을 'signup'으로 사용 -->
+        <a href="{% url 'account_signup' %}" class="overlap-wrapper">
             <div class="overlap-group">
                 <div class="text-wrapper-4">회원가입하기</div>
             </div>
@@ -54,11 +48,15 @@
         <div class="social-login-buttons">
             <form method="POST" action="{% provider_login_url 'kakao' %}">
                 {% csrf_token %}
-                <button class="primaryAction" type="submit"><div><img src="{% static 'img/kakao_login_large_narrow.png' %}" class="kakao-login" /></div></button>
+                <button class="primaryAction" type="submit">
+                    <div><img src="{% static 'img/kakao_login_large_narrow.png' %}" class="kakao-login" /></div>
+                </button>
             </form>
             <form method="POST" action="{% provider_login_url 'naver' %}">
                 {% csrf_token %}
-                <button class="primaryAction" type="submit"><div><img src="{% static 'img/btnG_완성형.png' %}" class="naver-login" /></div></button>
+                <button class="primaryAction" type="submit">
+                    <div><img src="{% static 'img/btnG_완성형.png' %}" class="naver-login" /></div>
+                </button>
             </form>
         </div>
     </div>

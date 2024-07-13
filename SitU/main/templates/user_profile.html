@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{%load static%} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <link rel="stylesheet" href="{% static 'css/user_profile.css' %}" />
 
 <div class="screen">
@@ -8,14 +8,14 @@
             <p>이름: {{ user.username }}</p>
             <p>전화번호: {{ user.phone_number }}</p>
             {% if request.user.is_authenticated %}
-            <form method="post" action="{% url 'user_logout' %}">
+            <form method="post" action="{% url 'account_logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary">로그아웃</button>
             </form>
             {% else %}
             <div class="button-container">
-                <a href="{% url 'user_login' %}" class="btn btn-primary">로그인</a>
-                <a href="{% url 'user_signup' %}" class="btn btn-secondary">회원가입</a>
+                <a href="{% url 'account_login' %}" class="btn btn-primary">로그인</a>
+                <a href="{% url 'account_signup' %}" class="btn btn-secondary">회원가입</a>
             </div>
             {% endif %}
         </div>

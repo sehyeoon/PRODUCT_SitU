@@ -43,7 +43,7 @@
                         <a
                             class="nav-link"
                             href="javascript:void(0);"
-                            onclick="showLoginAlert('{% url 'user_login' %}')"
+                            onclick="showLoginAlert('{% url 'account_login' %}')"
                             ><div><img src="{% static 'img/Heart.png' %}" class="heart-icon" /></div>
                             관심&즐겨찾기</a
                         >
@@ -56,7 +56,7 @@
                             마이</a
                         >
                         {% else %}
-                        <a class="nav-link" href="{% url 'user_profile' 0 %}"
+                        <a class="nav-link" href="{% url 'account_login' %}"
                             ><div><img src="{% static 'img/User.png' %}" class="user-icon" /></div>
                             마이</a
                         >

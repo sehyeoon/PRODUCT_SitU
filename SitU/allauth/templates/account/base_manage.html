@@ -1,1 +1,7 @@
-{% extends "allauth/layouts/manage.html" %}
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="manage-page">
+    <h2>계정 관리</h2>
+    <a href="{% url 'account_email' %}" class="btn btn-primary">이메일 관리</a>
+    <a href="{% url 'account_change_password' %}" class="btn btn-secondary">비밀번호 변경</a>
+</div>
+{% endblock %}
