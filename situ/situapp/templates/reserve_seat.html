@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Reserve</title>
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/reserve.css' %}" />
+    </head>
+    <body>
+        <div id="popup">
+            <div id="popup-content">
+                <h1>{{ seat.seat_id }}번 자리 선택 완료</h1>
+                <p>예약 후 15분 내로 카페 직원분의 인증을 받아야 예약이 확정됩니다!</p>
+                <form method="post" action="{{reservation_complete}}">
+                    {% csrf_token %}
+                    <input type="hidden" name="seat_id" value="{{ seat.seat_id }}" />
+                    <input type="hidden" name="number_of_people" value="1" />
+                    <button id="reserveSeatButton" type="submit">자리 선택하기</button>
+                </form>
+            </div>
+            <button id="popup-close" onclick="window.close()">Close</button>
+        </div>
+        <script src="{% static 'js/reserve_seat.js' %}"></script>
+    </body>
+</html>

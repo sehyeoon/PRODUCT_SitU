@@ -1,0 +1,28 @@
+{% extends 'base.html' %} {% load static%} {% block content %}
+        <div class="login-container">
+            <div class="logo">
+                <h1>SitU</h1>
+                <p>당신을 위해 남겨둔 자리</p>
+            </div>
+            <form action="{% url 'user_login' %}" method="post">
+                {% csrf_token %}
+                <div class="inputgroup">
+                    <label for="username"></label>
+                    <input type="text" id="username" name="username" required />
+                </div>
+                <div class="inputgroup">
+                    <label for="password"></label>
+                    <input type="password" id="password" name="password" required />
+                </div>
+                <button type="submit" class="button">로그인하기</button>
+            </form>
+            <button class="button" onclick="location.href='/signup'"></a>회원가입하기</button>
+
+            <div class="social-login">
+                <img src="{% static 'images/kakao.png' %}" alt="Kakao Login" class="social-icon" />
+                <img src="{% static 'images/naver.png' %}" alt="Naver Login" class="social-icon" />
+            </div>
+
+            <a href="{% url 'home' %}">home page</a>
+        </div>
+        {% endblock %}

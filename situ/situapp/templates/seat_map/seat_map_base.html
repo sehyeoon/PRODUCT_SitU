@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title %}Seat_map{% endblock %}</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/cafe.css' %}" />
+        {% block extra_head %}{% endblock %}
+    </head>
+    <body>
+        {% block content %}
+        <div class="title">
+            <div class="cafe_info">
+                <p class="cafe_time">{{ cafe.cafe_time }}</p>
+                <h1 class="cafe_name">{{ cafe.cafe_name }}</h1>
+            </div>
+            <div class="empty_seat">
+                <p>잔여석: {{ empty_seats }}</p>
+            </div>
+        </div>
+        <hr />
+
+        <script src="{% static 'js/seat_map.js' %}"></script>
+
+        {% endblock %}
+    </body>
+</html>

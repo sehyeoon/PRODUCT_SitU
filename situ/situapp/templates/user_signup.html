@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/signup.css' %}" />
+        <title>회원가입</title>
+    </head>
+    <body>
+        <div class="top">
+            <p>SitU에 오신 걸 환영합니다</p>
+            <h1>회원가입</h1>
+        </div>
+        <form method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <div class="inputgroup">
+                <p>이름</p>
+                <label for="username"></label>
+                <input type="text" id="username" name="username" placeholder="이름을 입력하세요" />
+            </div>
+            <div class="inputgroup">
+                <p>전화번호</p>
+                <label for="password"></label>
+                <input type="password" id="password" name="password" placeholder="전화번호를 입력하세요" />
+            </div>
+            <div class="inputgroup">
+                <p>아이디</p>
+                <label for="password"></label>
+                <input type="password" id="password" name="password" placeholder="아이디를 입력하세요" />
+            </div>
+            <div class="inputgroup">
+                <p>비밀번호</p>
+                <label for="password"></label>
+                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" />
+            </div>
+            <div class="inputgroup">
+                <p>비밀번호 확인</p>
+                <label for="password"></label>
+                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" />
+            </div>
+            <button type="submit">회원가입하기</button>
+        </form>
+    </body>
+</html>

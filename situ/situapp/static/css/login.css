@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700&display=swap');
+
+body {
+    font-family: 'Pretendard';
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    color: #ff8244;
+    top: 248px;
+    left: 107px;
+}
+
+h1 {
+    color: #ff8244;
+    font-size: 80px;
+    font-weight: 900;
+    line-height: 95.47px;
+    letter-spacing: -0.04em;
+
+    width: 153px;
+    height: 95px;
+    top: 165px;
+    left: 120px;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+p {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 23.87px;
+    letter-spacing: -0.04em;
+
+    width: 179px;
+    height: 24px;
+    padding: 0;
+    margin-top: 0;
+}
+
+input {
+    background-color: #d9d9d9;
+    width: 257px;
+    height: 48px;
+    top: 334px;
+    left: 68px;
+    gap: 0px;
+    border-radius: 44px;
+    opacity: 0px;
+    border: none;
+    margin: 6px;
+}
+
+.button {
+    background-color: #333333;
+    color: #ffffff;
+    width: 257px;
+    height: 36px;
+    top: 472px;
+    left: 68px;
+    gap: 0px;
+    border-radius: 10px 0px 0px 0px;
+    border-radius: 10px;
+    margin: 6px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 17.9px;
+    letter-spacing: -0.04em;
+    text-align: center;
+}
+
+.social-login {
+    display: flex;
+}
+
+.social-icon {
+    width: 50px;
+    height: 50px;
+}
