@@ -21,7 +21,7 @@
         <form method="post" action="{% url 'account_login' %}">
             {% csrf_token %}
             <div class="rectangle">
-                <input type="text" name="username" placeholder="아이디" required />
+                <input type="text" name="user_id" placeholder="아이디" required />
             </div>
             <div class="rectangle-2">
                 <input type="password" name="password" placeholder="비밀번호" required />

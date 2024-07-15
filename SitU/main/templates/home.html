@@ -8,9 +8,9 @@
             <h2 class="mb-4 location-title"><span id="current-location">안암동</span> 카페찾기</h2>
 
             <div class="button-grid">
-                <button class="btn btn-primary square-button">전체보기</button>
+                <a href="#" id="all-cafes-button" class="btn btn-primary square-button">전체보기</a>
                 {% for area in areas %}
-                <button class="btn btn-outline-primary square-button">{{ area }}</button>
+                <a href="{% url 'region_cafes' area %}" class="btn btn-outline-primary square-button">{{ area }}</a>
                 {% endfor %}
             </div>
 
@@ -23,16 +23,18 @@
                 <div class="card mb-3">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img src="{{ cafe.photo.url }}" class="card-img" alt="{{ cafe.name }}" />
+                            <img src="{{ cafe.cafe_photo.url }}" class="card-img" alt="{{ cafe.cafe_name }}" />
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title">{{ cafe.name }} <small>{{ cafe.distance }}km</small></h5>
+                                <h5 class="card-title">{{ cafe.cafe_name }} <small>{{ cafe.distance }}km</small></h5>
                                 <p class="card-text">
-                                    {{ cafe.opening_hours }}<br />
-                                    잔여석: {{ cafe.available_seats }}
+                                    {{ cafe.cafe_time }}<br />
+                                    잔여석: {{ cafe.empty_seats }}
                                 </p>
-                                <a href="{% url 'cafe_detail' cafe.id %}" class="btn btn-sm btn-primary">자리잡기</a>
+                                <a href="{% url 'cafe_detail' cafe.cafe_id %}" class="btn btn-sm btn-primary"
+                                    >자리잡기</a
+                                >
                             </div>
                         </div>
                     </div>
@@ -44,4 +46,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('all-cafes-button').addEventListener('click', function () {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                window.location.href = "{% url 'all_cafes' %}?lat=" + lat + '&lng=' + lng;
+            });
+        } else {
+            alert('Geolocation is not supported by this browser.');
+        }
+    });
+</script>
 {% endblock %}

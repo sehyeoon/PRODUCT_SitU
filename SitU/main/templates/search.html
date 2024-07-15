@@ -13,12 +13,12 @@
                     type="text"
                     name="q"
                     value="{{ query|default:'' }}"
-                    placeholder="카페 이름 또는 주소로 검색하기"
+                    placeholder="카페 이름으로 검색하기"
                     id="search-input"
                 />
             </form>
             <ul id="results-list">
-                {% for cafe in cafes %}
+                {% for Cafe in Cafes %}
                 <li><a href="{% url 'cafe_detail' cafe.id %}">{{ cafe.name }}</a> - {{ cafe.address }}</li>
                 {% empty %}
                 <li>검색 결과가 없습니다.</li>
