@@ -26,23 +26,31 @@
     </div>
     <div class="image">
         <h3>내부 사진</h3>
-        <div class="detail_image">
-            <h3>{{ cafe.photo }}<h3>
-        </div>
+            <div class="detail_image">
+                <img class="cafe_photo" src="{% static 'images/cafe_photo_1.png' %}" alt="Cafe Photo 1" />
+                <img class="cafe_photo" src="{% static 'images/cafe_photo_2.png' %}" alt="Cafe Photo 2" />
+                <img class="cafe_photo" src="{% static 'images/cafe_photo_3.png' %}" alt="Cafe Photo 3" />
+            </div>
     </div>
     <div class="info">
         <h3>상세 정보</h3>
         <div class="detail_info">
-            <p>운영시간 {{ cafe.cafe_time }}<p>
+            <div>
+            <p>운영시간 <p>
             <p>휴무일 <p>
-            <p>전화번호 {{ cafe.cafe_tel }}<p>
+            <p>전화번호 <p>
             <p>스터디룸 예약 <p>
+        </div>
+        <div style="margin-left: 10px">
+            <p>{{ cafe.cafe_time }}<p>
+            <p> x <p>
+            <p> {{ cafe.cafe_tel }}<p>
+            <p> ㅇ <p>
         </div>
     </div>
     <div class="reserve_button" data-cafe-id="{{ cafe.cafe_id }}">
         <h1>자리잡기</h1>
     </div>
     <script src="{% static 'js/cafe_detail.js' %}"></script>
-
 </body>
 </html>

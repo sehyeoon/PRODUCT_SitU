@@ -66,16 +66,22 @@ hr {
     opacity: 0.5;
 }
 
-.seat.available {
-    background-color: #ffffff; /* 예시 색상 */
+/* Styles for available seats */
+.seat[data-status='available'] .chair,
+.seat[data-status='available'] .table {
+    background-color: white; /* Chair and table color for available seats */
 }
 
-.seat .chair.reserved,
-.seat .table.reserved {
-    background-color: #ff8244;
+/* Styles for reserved seats */
+.seat[data-status='reserved'] .chair,
+.seat[data-status='reserved'] .table {
+    background-color: #ff8244; /* Chair and table color for reserved seats */
 }
 
-.seat .chair.occupied,
-.seat .table.occupied {
-    background-color: #333333; /* 예시 색상 */
+/* Styles for occupied seats */
+.seat[data-status='occupied'] .chair,
+.seat[data-status='occupied'] .table {
+    background-color: #333333; /* Chair and table color for occupied seats */
+    border-color: 2px solid #333333;
+    color: white;
 }

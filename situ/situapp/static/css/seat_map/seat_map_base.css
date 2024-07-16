@@ -1,0 +1,171 @@
+body {
+    margin-top: 20%;
+    margin-left: 10%;
+    font-family: 'Pretendard';
+}
+
+/*상단*/
+.title {
+    background-color: #ffffff;
+    display: flex;
+    width: 100%;
+    padding: 20px 0;
+    width: 393px;
+}
+
+.cafe_info {
+    background-color: #ffffff;
+    width: 250px;
+}
+
+.cafe_time {
+    font-family: 'Pretendard-Regular';
+    font-weight: 400;
+    color: #373737;
+    font-size: 20px;
+    letter-spacing: -1.05px;
+    line-height: normal;
+    margin: 0;
+}
+
+.cafe_name {
+    width: 213px;
+    font-family: 'Pretendard-ExtraBold';
+    font-weight: 800;
+    color: #ff8244;
+    font-size: 48px;
+    letter-spacing: -3.84px;
+    top: 22px;
+    left: 9px;
+    margin: 0;
+}
+
+.empty_seat {
+    width: 104px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.empty_seat p {
+    font-family: 'Pretendard-Medium';
+    font-weight: 400;
+    font-size: 20px;
+    text-align: bottom;
+    letter-spacing: -1.4px;
+    line-height: normal;
+    white-space: nowrap;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+hr {
+    background: rgba(255, 130, 68, 0.5);
+    margin-bottom: 0;
+    height: 5px;
+    border: none;
+}
+
+/*팝업창*/
+
+#reserveSeatButton {
+    background-color: #333333;
+    color: #ffffff;
+    width: 383px;
+    height: 46px;
+    border-radius: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto; /* Center the button horizontally */
+    padding: 0 20px; /* Add horizontal padding to the button */
+}
+
+#reserveSeatButton h3 {
+    font-family: 'Pretendard-Black';
+    height: 46px;
+    line-height: 46px;
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+#popup {
+    position: fixed; /* Ensures the popup stays fixed in the viewport */
+    top: 80%; /* Positions the top of the popup at the center vertically */
+    left: 50%;
+    /* Positions the left of the popup at the center horizontally */
+    transform: translate(-50%, -50%); /* Centers the popup precisely */
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 383px; /* Fixed width */
+    height: auto; /* Allows the popup to expand vertically as needed */
+    max-height: calc(100vh - 20px); /* Ensures the popup doesn't overflow the viewport */
+    overflow-y: auto; /* Enables vertical scrolling if content exceeds viewport height */
+    display: none;
+}
+
+/* Make the popup visible */
+#popup.active {
+    display: block;
+}
+
+#seat-info {
+    color: #ff8244;
+    text-align: start;
+}
+
+#popup-content {
+    margin-bottom: 20px;
+    color: #333333;
+    font-family: 'Pretendard';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: normal;
+    letter-spacing: -1.28px;
+    text-align: start;
+}
+#popup-content h1 {
+    margin-bottom: 0px;
+}
+#popup-content p {
+    margin-top: 2px;
+    margin-bottom: 25px;
+}
+
+#popup-close {
+    position: absolute;
+    top: 10px; /* Adjust top spacing as needed */
+    right: 10px; /* Adjust right spacing as needed */
+    cursor: pointer;
+    color: #dddddd;
+    font-size: 15px; /* Adjust font size as needed */
+    border: none;
+}
+
+#popup-close:before {
+    content: '\00D7'; /* Unicode 'x' character */
+}
+/* Styles for available seats */
+.seat[data-status='available'] .chair,
+.seat[data-status='available'] .table {
+    background-color: white; /* Chair and table color for available seats */
+}
+
+/* Styles for reserved seats */
+.seat[data-status='reserved'] .chair,
+.seat[data-status='reserved'] .table {
+    background-color: #ff8244; /* Chair and table color for reserved seats */
+}
+
+/* Styles for occupied seats */
+.seat[data-status='occupied'] .chair,
+.seat[data-status='occupied'] .table {
+    background-color: #333333; /* Chair and table color for occupied seats */
+    border-color: 2px solid #333333;
+    color: white;
+}

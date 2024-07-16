@@ -1,0 +1,136 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="{% static 'css/seat_overview.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/seat_map/seat_map_1.css' %}" />
+    </head>
+    <body>
+        <div class="title">
+            <div class="cafe_info">
+                <p class="cafe_time">안녕하세요 사장님!</p>
+                <h1 class="cafe_name">{{ cafe.cafe_name }}</h1>
+            </div>
+            <div>
+                <div class="empty_seat">
+                <p>잔여석:{{ cafe.empty_seats }}</p>
+            </div>
+        </div>
+    </div>
+
+        <hr />
+
+        <div class="F1_seat_container">
+            <div class="seat_container top">
+                <div class="entry">입구</div>
+                <div>
+                    {% for seat in seats %} {% if seat.seats_no == 1 %}
+                    <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                        <div class="seat chair"></div>
+                        <div class="seat table">{{ seat.seats_no }}</div>
+                        <div class="seat chair"></div>
+                    </div>
+                    {% endif %} {% endfor %} {% for seat in seats %} {% if seat.seats_no == 2 %}
+                    <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                        <div class="seat chair"></div>
+                        <div class="seat table">{{ seat.seats_no }}</div>
+                        <div class="seat chair"></div>
+                    </div>
+                    {% endif %} {% endfor %}
+                </div>
+                <div>
+                    {% for seat in seats %} {% if seat.seats_no == 3 %}
+                    <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                        <div class="seat chair"></div>
+                        <div class="seat table">{{ seat.seats_no }}</div>
+                        <div class="seat chair"></div>
+                    </div>
+                    {% endif %} {% endfor %} {% for seat in seats %} {% if seat.seats_no == 4 %}
+                    <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                        <div class="seat chair"></div>
+                        <div class="seat table">{{ seat.seats_no }}</div>
+                        <div class="seat chair"></div>
+                    </div>
+                    {% endif %} {% endfor %}
+                </div>
+            </div>
+            <div class="seat_container middle">
+                <div class="box_container">
+                    <div class="box">픽업대</div>
+                    <div class="box">2층 계단</div>
+                </div>
+                <div class="seats_container middle">
+                    <div class="seats_container middle1">
+                        {% for seat in seats %} {% if seat.seats_no == 5 %}
+                        <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                            <div class="seat chair"></div>
+                            <div class="seat table">{{ seat.seats_no }}</div>
+                            <div class="seat chair"></div>
+                        </div>
+                        {% endif %} {% endfor %} {% for seat in seats %} {% if seat.seats_no == 6 %}
+                        <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                            <div class="seat chair"></div>
+                            <div class="seat table">{{ seat.seats_no }}</div>
+                            <div class="seat chair"></div>
+                        </div>
+                        {% endif %} {% endfor %}
+                    </div>
+                    <div class="seats_container middle2">
+                        {% for seat in seats %} {% if seat.seats_no == 7 %}
+                        <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                            <div class="seat chair"></div>
+                            <div class="seat table">{{ seat.seats_no }}</div>
+                            <div class="seat chair"></div>
+                        </div>
+                        {% endif %} {% endfor %} {% for seat in seats %} {% if seat.seats_no == 8 %}
+                        <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                            <div class="seat chair"></div>
+                            <div class="seat table">{{ seat.seats_no }}</div>
+                            <div class="seat chair"></div>
+                        </div>
+                        {% endif %} {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="seat_container bottom">
+                {% for seat in seats %} {% if seat.seats_no == 9 %}
+                <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                    <div class="seat chair"></div>
+                    <div class="seat table">{{ seat.seats_no }}</div>
+                    <div class="seat chair no-right-radius"></div>
+                </div>
+                {% endif %} {% endfor %}{% for seat in seats %} {% if seat.seats_no == 10 %}
+                <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                    <div class="seat chair"></div>
+                    <div class="seat table">{{ seat.seats_no }}</div>
+                    <div class="seat chair sofa"></div>
+                </div>
+                {% endif %} {% endfor %}{% for seat in seats %} {% if seat.seats_no == 11 %}
+                <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                    <div class="seat chair"></div>
+                    <div class="seat table">{{ seat.seats_no }}</div>
+                    <div class="seat chair sofa"></div>
+                </div>
+                {% endif %} {% endfor %} {% for seat in seats %} {% if seat.seats_no == 12 %}
+                <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">
+                    <div class="seat chair"></div>
+                    <div class="seat table">{{ seat.seats_no }}</div>
+                    <div class="seat chair no-left-radius"></div>
+                </div>
+                {% endif %} {% endfor %}
+            </div>
+        </div>
+        <div id="popup">
+            <div id="popup-content">
+                <h1 id="seat-info">{{ seat.id }}번 자리좌석 이용현황</h1>
+                <p> 좌석 상태: {{ seat.seat_status }}</p>
+            <p>입장 시각: {{ sest.seat_start_time }} </p>
+            <button id="popup-close" onclick="window.close()"></button>
+        </div> 
+
+        <script src="{% static 'js/seat_overview.js' %}"></script>
+    </body>
+</html>

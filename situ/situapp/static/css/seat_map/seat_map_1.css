@@ -1,15 +1,17 @@
 /*카페파인 드가자*/
 
-/*.F1_seat_container {
-}*/
-@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700&display=swap');
+/*F1_seat_container*/
 
 body {
     width: 393px;
+    font-family: 'pretendard';
 }
 
 .seat_container {
     display: flex;
+    background: #d9d9d9;
+    margin-top: 0;
+    padding: 10px;
 }
 
 .seat_container.top {
@@ -33,13 +35,14 @@ body {
 .box,
 .entry {
     width: 100px;
-    height: 50px;
+    height: 70px;
     background-color: #333333;
     font-family: 'pretendard extrabold';
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 10px;
 }
 
 .seat {
@@ -62,6 +65,7 @@ body {
 
 .seat.table {
     font-family: 'pretendard extrabold';
+    background-color: #ffffff; /* 배경색 설정 */
     border-radius: 100%;
     border: 2px solid #ff8244;
     width: 53px;
@@ -134,16 +138,16 @@ body {
     margin: 0;
 }
 
-.seat.available {
-    background-color: #ffffff; /* 예시 색상 */
+.chair.sofa {
+    border-radius: 0%;
 }
 
-.seat .chair.reserved,
-.seat .table.reserved {
-    background-color: #ff8244;
+.no-right-radius {
+    border-top-right-radius: 0%;
+    border-bottom-right-radius: 0%;
 }
 
-.seat .chair.occupied,
-.seat .table.occupied {
-    background-color: #333333; /* 예시 색상 */
+.no-left-radius {
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
 }

@@ -15,20 +15,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from situapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('start/', views.start, name='start'),
+    path('start/', views.startview, name='start'),
+    path('accounts/', include('allauth.urls')),
+    path('signup/', views.user_signup, name='signup'),
     path('login/', views.user_login, name='user_login'),
-    path('signup/', views.user_signup, name='user_signup'),
+    path('logout/', views.user_logout, name='user_logout'),
     path('cafe/<int:cafe_id>/', views.cafe_detail, name='cafe_detail'),
     path('cafe/<int:cafe_id>/seats/', views.seat_map, name='seat_map'),
-    path('reserve/<int:seat_id>/', views.reserve_seat, name='reserve_seat'),
-    path('reservation_complete/', views.reservation_complete, name='reservation_complete'),  # Add this line
-    path('cafe/<int:cafe_id>/seat_view', views.seat_view, name='seat_view'),  # Add this line
+    path('reservation/create/<int:cafe_id>/<int:seat_id>/', views.reservation_create, name='reservation_create'),
+    path('reservation_success/', views.reservation_success, name='reservation_success'),  # Add this line
+    path('cafe/<int:cafe_id>/seat_overview', views.seat_overview, name='seat_view'),  # Add this line
+    
     path('update_seat_status/<int:seat_id>/', views.update_seat_status, name='update_seat_status'),
-
+    path('confirm_reservation/<int:seat_id>/', views.confirm_reservation, name='confirm_reservation'),
+    path('cancel_reservation/<int:seat_id>/', views.cancel_reservation, name='cancel_reservation'),
+    path('seat_check/<int:seat_id>/', views.seat_check, name='seat_check'),
 ]
+
+

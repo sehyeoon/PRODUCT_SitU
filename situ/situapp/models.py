@@ -1,52 +1,64 @@
 from django.db import models
-
-# Create your models here.
-from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.contrib.auth.models import AbstractUser,  BaseUserManager, PermissionsMixin
+from django.utils import timezone
 
 class User(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     telephone = models.CharField(max_length=20)
     user_id = models.CharField(max_length=50, unique=True)
-    user_pw = models.CharField(max_length=100)
+    password = models.CharField(max_length=128)
     
 class TempUser(models.Model):
     tempuser_tel = models.CharField(max_length=20)
     temp_pw = models.CharField(max_length=100)
     
 class Cafe(models.Model):
+    id = models.AutoField(primary_key=True)
     cafe_id = models.CharField(max_length=50, unique=True)
     cafe_pw = models.CharField(max_length=100)
     cafe_name = models.CharField(max_length=100)
-    ceo_name = models.CharField(max_length=100)
-    cafe_time = models.CharField(max_length=100)
-    ceo_tel = models.CharField(max_length=20)
-    cafe_region = models.CharField(max_length=100)
-    cafe_tel = models.CharField(max_length=20)
-    cafe_address = models.CharField(max_length=255, default="Default Address")
-    seats_count = models.IntegerField()
-    empty_seats = models.IntegerField()
+    ceo_name = models.CharField(max_length=100, null=True, blank=True)
+    cafe_time = models.CharField(max_length=100, null=True, blank=True)
+    ceo_tel = models.CharField(max_length=20, null=True, blank=True)
+    cafe_region = models.CharField(max_length=100, null=True, blank=True)
+    cafe_tel = models.CharField(max_length=20, null=True, blank=True)
+    cafe_address = models.CharField(max_length=255, null=True, blank=True)
     cafe_photo = models.ImageField(upload_to='cafe_photos/', null=True, blank=True)
+    seats_count = models.IntegerField(null=True, blank=True)
+    empty_seats = models.IntegerField(null=True, blank=True)
+
 
 class Seat(models.Model):
-    SEAT_STATUS_CHOICES = [
-        ('available', 'Available'),
-        ('reserved', 'Reserved'),
-        ('occupied', 'Occupied'),
-    ]
-    status = models.CharField(max_length=10, choices=SEAT_STATUS_CHOICES, default='available')
-    seat_id =  models.CharField(max_length=50, unique=True)
+    id = models.AutoField(primary_key=True)
     cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE)
-    plug = models.BooleanField()
-    backseat = models.BooleanField()
+    seat_status = models.CharField(max_length=20, choices=[('available', 'Available'), ('occupied', 'Occupied'), ('reserved', 'Reserved')])
+    plug = models.BooleanField(null=True, blank=True)
+    backseat = models.BooleanField(null=True, blank=True)
     seat_start_time = models.DateTimeField(null=True, blank=True)
     seat_use_time = models.DateTimeField(null=True, blank=True)
-    seats_no = models.CharField(max_length=128)    
+    seats_no = models.IntegerField(null=True, blank=True)
+    seats_count = models.IntegerField(null=True, blank=True)
+    empty_seats = models.IntegerField(null=True, blank=True)
     
     
 class Reservation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
-    reservation_time = models.DateTimeField()
-    number_of_people = models.IntegerField()
-    seat_status = models.CharField(max_length=10, choices=[('available', 'Available'),('reserve','Reserve'),('occupied', 'Occupied')])
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, to_field='id', on_delete=models.CASCADE, related_name='reservations')
+    cafe = models.ForeignKey(Cafe, to_field='id', on_delete=models.CASCADE, related_name='reservations')
+    noneuser_tel = models.CharField(max_length=20, null=True, blank=True)
+    seat = models.ForeignKey(Seat, to_field='id', on_delete=models.CASCADE, related_name='reservations')
+    reservation_time = models.DateTimeField(default=timezone.now)  # 기본값 설정
+    number_of_people = models.IntegerField(default=1)  # 기본값 설정
+    status = models.CharField(
+        max_length=10,
+        choices=[
+            ('예약중', '예약중'),
+            ('사용중', '사용중'),
+            ('빈자리', '빈자리'),
+        ],
+        default='예약중'
+    )
+
+    def __str__(self):
+        return f"{self.user.name} - {self.cafe.cafe_name} - {self.seat.seats_no}"

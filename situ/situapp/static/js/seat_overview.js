@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.seat').forEach(function (seat) {
+        var status = seat.getAttribute('data-status');
+        updateSeatVisual(seat, status);
+
         seat.addEventListener('click', function () {
-            var seatId = this.id;
+            var selectedSeatId = this.id;
             var currentStatus = this.getAttribute('data-status');
             var newStatus;
 
@@ -13,13 +16,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 newStatus = 'available';
             } else {
                 console.error('Unknown current status:', currentStatus);
-                return; // 알 수 없는 상태일 경우 함수 종료
+                return;
             }
 
-            console.log(`Requesting status update for seat ID: ${seatId} to status: ${newStatus}`);
+            console.log(`Requesting status update for seat ID: ${selectedSeatId} to status: ${newStatus}`);
 
-            fetch(`/update_seat_status/${seatId}/`, {
-                // URL 수정
+            fetch(`/update_seat_status/${selectedSeatId}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then((data) => {
                     if (data && data.success) {
                         updateSeatVisual(seat, newStatus);
-                        console.log('Seat status updated successfully:', { seatId });
+                        console.log('Seat status updated successfully:', { selectedSeatId });
                     } else {
                         console.error('Failed to update seat status:', data ? data.error : 'Unknown error');
                     }
@@ -51,16 +53,12 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function updateSeatVisual(seatElement, status) {
-    seatElement.setAttribute('data-status', status); // 상태 속성 업데이트
+    seatElement.setAttribute('data-status', status);
 
-    // 모든 chair와 table 요소 선택
     const chairs = seatElement.querySelectorAll('.seat.chair');
     const table = seatElement.querySelector('.seat.table');
 
-    // 상태에 따른 클래스 설정
-    const statusClass = status === 'reserve' ? 'reserved' : '';
-
-    if (status === 'reserve') {
+    if (status === 'reserved') {
         chairs.forEach((chair) => {
             chair.style.backgroundColor = '#ff8244';
             chair.classList.add('reserved');
@@ -79,18 +77,16 @@ function updateSeatVisual(seatElement, status) {
             table.classList.remove('reserved');
         }
     } else {
-        // 'available' 상태
         chairs.forEach((chair) => {
-            chair.style.backgroundColor = ''; // 기본 색상으로 리셋
+            chair.style.backgroundColor = '';
             chair.classList.remove('reserved');
         });
         if (table) {
-            table.style.backgroundColor = ''; // 기본 색상으로 리셋
+            table.style.backgroundColor = '';
             table.classList.remove('reserved');
         }
     }
 }
-// getCookie 함수는 그대로 유지
 
 function getCookie(name) {
     let cookieValue = null;
@@ -107,10 +103,57 @@ function getCookie(name) {
     return cookieValue;
 }
 
-// 좌석 상태 업데이트 후 로컬 스토리지에 저장
-function saveSeatStatus(seatId, status) {
-    localStorage.setItem(`seat_${seatId}`, status);
-}
+document.addEventListener('DOMContentLoaded', function () {
+    // 모든 좌석 요소 가져오기
+    var seats = document.querySelectorAll('.seat');
 
-// 업데이트 후 상태 저장
-saveSeatStatus(seatId, newStatus);
+    seats.forEach(function (seat) {
+        seat.addEventListener('mouseover', function () {
+            // 좌석 ID 가져오기
+            var seatId = seat.getAttribute('id');
+            // 좌석 상태 가져오기
+            var seatStatus = seat.getAttribute('data-status');
+            // 입장 시각 가져오기 (예시로 start_time이라는 속성을 가정)
+            var startTime = seat.getAttribute('data-start-time');
+
+            // 팝업 내용을 채우기
+            var seatInfoElement = document.getElementById('seat-info');
+            seatInfoElement.textContent = seatId + '번 자리 좌석 이용 현황';
+
+            var popupContentElement = document.getElementById('popup-content');
+            var popupStatus = popupContentElement.querySelector('p');
+
+            if (seatStatus === 'available') {
+                popupStatus.textContent = '좌석 상태: 사용 가능';
+            } else if (seatStatus === 'reserved') {
+                popupStatus.textContent = '좌석 상태: 예약됨';
+            } else if (seatStatus === 'occupied') {
+                popupStatus.textContent = '좌석 상태: 사용 중';
+            }
+
+            var popupStartTime = popupContentElement.querySelector('p:nth-child(2)');
+            if (startTime) {
+                popupStartTime.textContent = '입장 시각: ' + startTime;
+            } else {
+                popupStartTime.textContent = '';
+            }
+
+            // 팝업 열기
+            var popupElement = document.getElementById('popup');
+            popupElement.classList.add('active');
+        });
+
+        seat.addEventListener('mouseout', function () {
+            // 팝업 닫기
+            var popupElement = document.getElementById('popup');
+            popupElement.classList.remove('active');
+        });
+    });
+
+    // 팝업 닫기 버튼 설정
+    var popupCloseButton = document.getElementById('popup-close');
+    popupCloseButton.addEventListener('click', function () {
+        var popupElement = document.getElementById('popup');
+        popupElement.classList.remove('active');
+    });
+});

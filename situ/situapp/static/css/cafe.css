@@ -1,6 +1,5 @@
 body {
-    margin-top: 20%;
-    margin-left: 10%;
+    margin-top: 10%;
 }
 
 .title {
@@ -8,12 +7,15 @@ body {
     display: flex;
     width: 100%;
     padding: 20px 0;
-    width: 393px;
+    max-width: 393px;
+    box-sizing: border-box;
+    margin: 0 auto;
 }
 
 .cafe_info {
     background-color: #ffffff;
-    width: 250px;
+    width: 100%;
+    max-width: 250px;
 }
 
 .cafe_time {
@@ -21,45 +23,53 @@ body {
     font-weight: 400;
     color: #373737;
     font-size: 20px;
-    letter-spacing: -1.05px;
     line-height: normal;
     margin: 0;
+    letter-spacing: -1.6px;
 }
 
 .cafe_name {
-    width: 213px;
+    width: 100%;
+    max-width: 213px;
     font-family: 'Pretendard-ExtraBold';
     font-weight: 800;
     color: #ff8244;
     font-size: 48px;
     letter-spacing: -3.84px;
-    top: 22px;
-    left: 9px;
     margin: 0;
 }
 
 .empty_seat {
-    width: 104px;
+    width: 100%;
+    max-width: 104px;
     text-align: right;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: end;
+    letter-spacing: -1.6px;
+    color: #ff8244;
+    font-family: 'Pretendard';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    letter-spacing: -1.4px;
 }
 
 .empty_seat p {
-    font-family: 'Pretendard-Medium';
-    font-weight: 400;
+    color: #333;
+    text-align: right;
+    font-family: 'Pretendard';
     font-size: 20px;
-    text-align: bottom;
-    letter-spacing: -1.4px;
+    font-style: normal;
+    font-weight: 500;
     line-height: normal;
-    white-space: nowrap;
-    color: #333333;
-    margin-bottom: 8px;
+    letter-spacing: -1.4px;
 }
 
 hr {
-    width: 393px;
+    width: 100%;
+    max-width: 393px;
     height: 2px;
     border: none;
     background-color: #ff8244;
@@ -68,16 +78,20 @@ hr {
 
 .location {
     background-color: #ffffff;
-    width: 393px;
+    width: 100%;
+    max-width: 393px;
     height: auto;
     position: relative;
     padding: 20px 0;
+    box-sizing: border-box;
+    margin: 0 auto;
 }
 
 .map {
-    position: relative;
-    width: 341px;
-    height: 163px;
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    aspect-ratio: 360 / 163; /* 가로 세로 비율 유지 */
     top: 0;
     left: 0;
     border: #ff8244 solid 2px;
@@ -87,9 +101,12 @@ hr {
 .cafe_map {
     border: #ff8244 solid 2px;
     border-radius: 10px;
-    width: 326px;
-    height: 123px;
-    margin: 5.5px;
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    aspect-ratio: 340 / 123; /* 가로 세로 비율 유지 */
+    margin: auto;
+    margin-top: 8px;
     padding: auto;
 }
 
@@ -97,25 +114,40 @@ hr {
     font-family: 'Pretendard-Light';
     font-weight: 300;
     color: #333333;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: -0.7px;
     line-height: normal;
-    margin-left: 5.5px;
+    margin-left: 8px;
 }
 
 .image {
     background-color: #ffffff;
-    width: 393px;
+    width: 100%;
+    max-width: 393px;
     height: auto;
     position: relative;
     padding: 20px 0;
+    box-sizing: border-box;
+    margin: 0 auto;
 }
 
 .detail_image {
     position: relative;
-    width: 352px;
-    height: 130px;
+    display: flex;
+    left: -3px;
+    width: 375px;
+    height: auto;
+    aspect-ratio: 352 / 147; /* 가로 세로 비율 유지 */
     margin: 0 auto;
+    justify-content: space-around;
+    margin-left: 0px;
+}
+
+.cafe_photo {
+    width: 115px;
+    height: 115px;
+    border: #ff8244 solid 2px;
+    border-radius: 10px;
 }
 
 h3 {
@@ -127,19 +159,28 @@ h3 {
 
 .info {
     background-color: #ffffff;
-    width: 393px;
+    margin-top: 0;
+    width: 100%;
+    max-width: 393px;
     height: auto;
     position: relative;
     padding: 20px 0;
+    box-sizing: border-box;
+    margin: 0 auto;
+    left: 0px;
+    margin-bottom: 50px;
 }
 
 .detail_info {
     position: relative;
-    width: 360px;
-    height: 147px;
-    width: 340px;
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    aspect-ratio: 340 / 147; /* 가로 세로 비율 유지 */
     border: #ff8244 solid 2px;
     border-radius: 10px;
+    display: flex;
+    padding: 10px;
 }
 
 .detail_info p {
@@ -153,7 +194,8 @@ h3 {
 
 .reserve_button {
     background-color: #333333;
-    width: 393px;
+    width: 100%;
+    max-width: 393px;
     height: 46px;
     border-radius: 39px;
     display: flex;
@@ -174,27 +216,15 @@ h3 {
     font-size: 18px;
 }
 
-/* 팝업창 스타일 */
-#popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
+/* 미디어 쿼리: 작은 화면용 */
+@media (max-width: 768px) {
+    body {
+        margin-top: 10%;
+        margin-left: 5%;
+    }
 
-#popup-content {
-    margin-bottom: 20px;
-}
-
-#popup-close {
-    display: block;
-    text-align: right;
-    cursor: pointer;
-    color: red;
+    .map,
+    .cafe_map {
+        width: 100%;
+    }
 }
