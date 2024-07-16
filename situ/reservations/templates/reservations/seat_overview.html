@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Seat Overview</title>
+</head>
+<body>
+    <h1>안녕하세요, {{ user.name }} 사장님!</h1>
+    <h2>{{ user.username }}</h2>
+    <table>
+        <tr>
+            <th>Seat Number</th>
+            <th>Status</th>
+            <th>Reserved By</th>
+            <th>Start Time</th>
+            <th>Use Time</th>
+            <th>Actions</th>
+        </tr>
+        {% for seat in seats %}
+        <tr>
+            <td>{{ seat.seats_no }}</td>
+            <td>{{ seat.get_seat_status_display }}</td>
+            <td>
+                {% if seat.reserved_by %}
+                    {{ seat.reserved_by.username }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+            <td>{{ seat.seat_start_time }}</td>
+            <td>
+                {% if seat.seat_start_time %}
+                {{ seat.seat_start_time|timeuntil }}
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+            <td>
+                {% if seat.seat_status == 'reserved' %}
+                    <a href="{% url 'confirm_reservation' seat.id %}">예약 확정하기</a>
+                    <a href="{% url 'cancel_reservation' seat.id %}">예약 취소하기</a>
+                {% elif seat.seat_status == 'occupied' %}
+                    <a href="{% url 'update_seat_status' seat.id 'available' %}">빈 자리로 변경</a>
+                {% else %}
+                    <a href="{% url 'update_seat_status' seat.id 'reserved' %}">예약</a>
+                {% endif %}
+                {% if seat.seat_status == 'reserved' %}
+                    <a href="{% url 'seat_check' seat.id %}">착석 체크</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

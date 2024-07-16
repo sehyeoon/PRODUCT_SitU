@@ -37,7 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
+    'reservations',
+    'dashboard',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,10 +55,18 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'situ.urls'
 
+AUTH_USER_MODEL = 'accounts.Cafe'
+
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.StoreIDBackend',
+    'django.contrib.auth.backends.ModelBackend',  
+]
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,7 +79,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'situ.wsgi.application'
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.StoreIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+
+
 
 
 # Database
@@ -75,8 +93,12 @@ WSGI_APPLICATION = 'situ.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'situ',
+        'USER': 'sehyeon',
+        'PASSWORD': 'rlatpgus',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -115,7 +137,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
