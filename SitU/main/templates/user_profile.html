@@ -2,23 +2,56 @@
 <link rel="stylesheet" href="{% static 'css/user_profile.css' %}" />
 
 <div class="screen">
-    <div class="div">
-        <div class="frame">
-            <h2>프로필</h2>
-            <p>이름: {{ user.username }}</p>
-            <p>전화번호: {{ user.phone_number }}</p>
-            {% if request.user.is_authenticated %}
-            <form method="post" action="{% url 'account_logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary">로그아웃</button>
-            </form>
+    <div class="profile-container">
+        <h2>
+            반갑습니다!
+            {{user.name}}님</p>
+        </h2>
+        <div class="profile-info"></div>
+        <div class="reservations">
+            <h3>현재 예약</h3>
+            {% if current_reservations %}
+            <ul>
+                {% for reservation in current_reservations %}
+                <li>
+                    {{ reservation.cafe.cafe_name }} - 좌석 번호: {{ reservation.seat.seats_no }} - 예약 시간: {{
+                    reservation.reservation_time }}
+                </li>
+                {% endfor %}
+            </ul>
             {% else %}
-            <div class="button-container">
-                <a href="{% url 'account_login' %}" class="btn btn-primary">로그인</a>
-                <a href="{% url 'account_signup' %}" class="btn btn-secondary">회원가입</a>
-            </div>
+            <p>현재 예약이 없습니다.</p>
+            {% endif %}
+            <div class="separator"></div>
+            <h3>과거 예약 기록</h3>
+            {% if past_reservations %}
+            <ul>
+                {% for reservation in past_reservations %}
+                <li>
+                    {{ reservation.cafe.cafe_name }} - 좌석 번호: {{ reservation.seat.seats_no }} - 예약 시간: {{
+                    reservation.reservation_time }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>과거 예약 기록이 없습니다.</p>
             {% endif %}
         </div>
+        <div class="separator"></div>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+            <div class="profile-actions">
+                <a href="{% url 'account_change_password' %}" class="btn btn-secondary">비밀번호 변경</a>
+            </div>
+            <button type="submit" class="btn btn-primary">로그아웃</button>
+        </form>
+        {% else %}
+        <div class="button-container">
+            <a href="{% url 'user_login' %}" class="btn btn-primary">로그인</a>
+            <a href="{% url 'user_signup' %}" class="btn btn-secondary">회원가입</a>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

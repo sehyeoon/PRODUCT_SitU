@@ -8,21 +8,22 @@
             <h1 class="mt-4"><span class="region-name">{{ region_name }}</span> 카페</h1>
             <div class="card-container">
                 {% for cafe in cafes %}
+
                 <div class="card mb-3">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <img src="{{ cafe.cafe_photo.url }}" class="card-img" alt="{{ cafe.cafe_name }}" />
+                    <div class="card-content">
+                        <div class="card-image">
+                            <img src="{{ cafe.cafe_photo }}" class="card-img" alt="{{ cafe.cafe_name }}" />
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ cafe.cafe_name }}</h5>
-                                <p class="card-text">
-                                    {{ cafe.cafe_time }}<br />
-                                    잔여석: {{ cafe.empty_seats }}
-                                </p>
-                                <a href="{% url 'cafe_detail' cafe.id %}" class="btn btn-sm btn-primary">자리잡기</a>
-                            </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{% url 'cafe_detail' cafe.cafe_id %}">{{ cafe.cafe_name }}</a>
+                            </h5>
+                            <p class="card-text">
+                                {{ cafe.cafe_time }}<br />
+                                잔여석: {{ cafe.empty_seats }}
+                            </p>
                         </div>
+                        <a href="{% url 'seat_map' cafe.cafe_id %}" class="btn btn-sm btn-primary">자리잡기</a>
                     </div>
                 </div>
                 {% empty %}

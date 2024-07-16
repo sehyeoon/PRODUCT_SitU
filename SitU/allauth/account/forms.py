@@ -538,14 +538,17 @@ class AddEmailForm(UserForm):
 
 class ChangePasswordForm(PasswordVerificationMixin, UserForm):
     oldpassword = PasswordField(
-        label=_("Current Password"), autocomplete="current-password"
+        label=_("현재 비밀번호"), autocomplete="current-password"
     )
-    password1 = SetPasswordField(label=_("New Password"))
-    password2 = PasswordField(label=_("New Password (again)"))
+    password1 = SetPasswordField(label=_("새로운 비밀번호"))
+    password2 = PasswordField(label=_("새로운 비밀번호 (확인)"))
 
     def __init__(self, *args, **kwargs):
         super(ChangePasswordForm, self).__init__(*args, **kwargs)
         self.fields["password1"].user = self.user
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'  # CSS 클래스 추가
+            field.widget.attrs['placeholder'] = field.label  # Placeholder 추가
 
     def clean_oldpassword(self):
         if not self.user.check_password(self.cleaned_data.get("oldpassword")):

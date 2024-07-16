@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Reserve Success</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700&display=swap');
+
+            body,
+            .fade-background {
+                font-family: 'Pretendard', sans-serif;
+                text-align: center;
+                padding-top: 50px;
+                color: white;
+
+                opacity: 1;
+                transition: opacity 1s ease-out; /* Add a transition effect for opacity */
+            }
+
+            body.fade-out,
+            .fade-background.fade-out {
+                opacity: 0;
+            }
+
+            .fade-background {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: #ff8234;
+                z-index: -1; /* Ensures the background is behind the content */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="fade-background"></div>
+        <h1>SitU</h1>
+        <h1>자리 예약 완료!</h1>
+        <h3>당신을 위해 자리를 남겨두었습니다</h3>
+        <p>2초 후에 메인 페이지로 이동합니다...</p>
+
+        <script>
+            // JavaScript to redirect to the main page after 2 seconds with a fade-out effect
+            setTimeout(function () {
+                document.body.classList.add('fade-out');
+                document.querySelector('.fade-background').classList.add('fade-out');
+            }, 1800); // Start fading out just before redirecting
+
+            setTimeout(function () {
+                window.location.href = '/'; // Redirects to the root URL
+            }, 2000); // 2000 milliseconds = 2 seconds
+        </script>
+    </body>
+</html>

@@ -81,3 +81,24 @@ p {
     margin-bottom: 0;
     font-size: 1.2rem;
 }
+
+.location-search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#current-location-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#current-location-button:hover {
+    background-color: #e66a2e;
+}

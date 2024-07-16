@@ -50,6 +50,9 @@ class User(AbstractBaseUser, PermissionsMixin):  # PermissionsMixin을 추가하
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
+class TempUser(models.Model):
+    tempuser_tel = models.CharField(max_length=20)
+    temp_pw = models.CharField(max_length=100)
 
 class Cafe(models.Model):
     id = models.AutoField(primary_key=True)

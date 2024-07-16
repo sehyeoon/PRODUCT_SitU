@@ -1,0 +1,156 @@
+/*카페파인 드가자*/
+
+/*F1_seat_container*/
+body {
+    font-family: 'Pretendard', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    color: var(--secondary-color);
+    letter-spacing: -0.05rem;
+}
+
+.seat_container {
+    display: flex;
+    background: #d9d9d9;
+    margin-top: 0;
+    padding: 10px;
+}
+
+.seat_container.top {
+    height: 200px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.seat_container.middle {
+    height: 300px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.seat_container.bottom {
+    height: 200px;
+    display: flex;
+    justify-content: end;
+}
+
+.box,
+.entry {
+    width: 100px;
+    height: 70px;
+    background-color: #333333;
+    font-family: 'pretendard extrabold';
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.seat {
+    width: 120px; /* 네모박스 너비 */
+    height: 54px; /* 네모박스 높이 */
+    font-family: 'Pretendard-ExtraBold'; /* 폰트 설정 */
+    display: flex; /* 내부 요소를 flex로 배치 */
+    justify-content: space-between;
+    margin: 5px;
+}
+
+.seat.chair {
+    width: 24px; /* 네모박스 너비 */
+    height: 50px; /* 네모박스 높이 */
+    background-color: #ffffff; /* 배경색 설정 */
+    border-radius: 10px;
+    border: 2px solid #ff8244;
+    margin: 0;
+}
+
+.seat.table {
+    font-family: 'pretendard extrabold';
+    background-color: #ffffff; /* 배경색 설정 */
+    border-radius: 100%;
+    border: 2px solid #ff8244;
+    width: 53px;
+    height: 53px;
+    border-radius: 100%; /* 원형으로 모양 설정 */
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.seat_container.middle .seat {
+    display: flex;
+    flex-direction: column;
+    height: 120px;
+    width: 50px;
+}
+
+.seats_container.middle1 {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.seats_container.middle2 {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+.seat_container.middle .seat.seat.chair {
+    height: 24px; /* 네모박스 너비 */
+    width: 50px; /* 네모박스 높이 */
+    margin: 0;
+}
+
+.seat_container.middle .seat.seat.table {
+    font-family: 'pretendard extrabold';
+    border-radius: 100%;
+    border: 2px solid #ff8244;
+    width: 53px;
+    height: 53px;
+    border-radius: 100%; /* 원형으로 모양 설정 */
+    margin: 0;
+}
+
+.seat_container.bottom {
+    display: flex;
+}
+
+.seat_container.bottom .seat {
+    display: flex;
+    flex-direction: column;
+    height: 120px;
+    width: 50px;
+}
+
+.seat_container.bottom .seat.seat.chair {
+    height: 24px; /* 네모박스 너비 */
+    width: 50px; /* 네모박스 높이 */
+    margin: 0;
+}
+
+.seat_container.bottom .seat.seat.table {
+    font-family: 'pretendard extrabold';
+    border-radius: 100%;
+    border: 2px solid #ff8244;
+    width: 53px;
+    height: 53px;
+    border-radius: 100%; /* 원형으로 모양 설정 */
+    margin: 0;
+}
+
+.chair.sofa {
+    border-radius: 0%;
+}
+
+.no-right-radius {
+    border-top-right-radius: 0%;
+    border-bottom-right-radius: 0%;
+}
+
+.no-left-radius {
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+}

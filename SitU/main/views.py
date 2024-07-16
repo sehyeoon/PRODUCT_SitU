@@ -6,7 +6,9 @@ from django.db.models import Q
 from django.contrib import messages
 from django.http import JsonResponse
 from geopy.distance import distance
+from django.utils import timezone
 from django.contrib.auth.hashers import check_password
+import json
 
 def home(request):
     areas = ['정후', '참살이', '정문', '제기동', '개운사길', '옆살이', '이공계']
@@ -47,32 +49,44 @@ def nearby_cafes(request):
 
     return JsonResponse(cafes, safe=False)
 
-def get_all_cafes(user_lat, user_lng):
+def all_cafes(request):
+    user_lat = request.GET.get('lat')
+    user_lng = request.GET.get('lng')
+    
     cafes = []
     for cafe in Cafe.objects.all():
-        if cafe.latitude and cafe.longitude:
+        cafe_data = {
+            'cafe_id': cafe.cafe_id,
+            'cafe_name': cafe.cafe_name,
+            'cafe_time': cafe.cafe_time,
+            'empty_seats': cafe.empty_seats,
+            'cafe_photo': cafe.cafe_photo.url if cafe.cafe_photo else '',
+        }
+        
+        if user_lat and user_lng and cafe.latitude and cafe.longitude:
+            user_location = (float(user_lat), float(user_lng))
             cafe_location = (cafe.latitude, cafe.longitude)
-            user_location = (user_lat, user_lng)
             dist = distance(user_location, cafe_location).km
-            cafes.append({
-                'cafe_id': cafe.cafe_id,
-                'cafe_name': cafe.cafe_name,
-                'cafe_time': cafe.cafe_time,
-                'empty_seats': cafe.empty_seats,
-                'cafe_photo': cafe.cafe_photo.url if cafe.cafe_photo else '',
-                'distance': round(dist, 2)
-            })
-    return sorted(cafes, key=lambda x: x['distance'])
+            cafe_data['distance'] = round(dist, 2)
+        else:
+            cafe_data['distance'] = None
+        
+        cafes.append(cafe_data)
+    
+    # 거리 정보가 있는 경우에만 정렬
+    cafes_with_distance = [c for c in cafes if c['distance'] is not None]
+    cafes_without_distance = [c for c in cafes if c['distance'] is None]
+    
+    sorted_cafes = sorted(cafes_with_distance, key=lambda x: x['distance']) + cafes_without_distance
 
-def all_cafes(request):
-    user_lat = float(request.GET.get('lat'))
-    user_lng = float(request.GET.get('lng'))
-    all_cafes = get_all_cafes(user_lat, user_lng)
-    context = {
-        'region_name': '전체보기',
-        'cafes': all_cafes,
-    }
-    return render(request, 'region.html', context)
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse(sorted_cafes, safe=False)
+    else:
+        context = {
+            'region_name': '전체',
+            'cafes': sorted_cafes,
+        }
+        return render(request, 'region.html', context)
 
 def cafe_detail(request, cafe_id):
     cafe = get_object_or_404(Cafe, cafe_id=cafe_id)
@@ -93,9 +107,26 @@ def search(request):
 
 def ajax_search(request):
     query = request.GET.get('q', '')
-    cafes = Cafe.objects.filter(Q(cafe_name__icontains=query) | Q(cafe_address__icontains=query))
+    plug_filter = request.GET.get('plug') == 'true'
+    backseat_filter = request.GET.get('backseat') == 'true'
+    filters_applied = request.GET.get('filtersApplied') == 'true'
+
+    cafes = Cafe.objects.all()
+
+    if query:
+        cafes = cafes.filter(Q(cafe_name__icontains=query) | Q(cafe_address__icontains=query))
+
+    if filters_applied:
+        if plug_filter and backseat_filter:
+            cafes = cafes.filter(seat__seat_status='available', seat__plug=True, seat__backseat=True).distinct()
+        elif plug_filter:
+            cafes = cafes.filter(seat__seat_status='available', seat__plug=True).distinct()
+        elif backseat_filter:
+            cafes = cafes.filter(seat__seat_status='available', seat__backseat=True).distinct()
+
     results = [{'id': cafe.id, 'cafe_name': cafe.cafe_name, 'cafe_address': cafe.cafe_address} for cafe in cafes]
     return JsonResponse(results, safe=False)
+
 
 @login_required
 def user_likes(request, user_id):
@@ -119,7 +150,23 @@ def user_profile(request, User_id):
     if User_id == 0:
         return redirect('user_login')
     user = get_object_or_404(User, id=User_id)
-    return render(request, 'user_profile.html', {'user': user})
+    current_reservations = Reservation.objects.filter(
+        user=user,
+        reservation_time__gte=timezone.now()
+    ).order_by('reservation_time')
+    
+    # 현재 시간 이전의 예약을 가져옵니다 (과거 예약)
+    past_reservations = Reservation.objects.filter(
+        user=user,
+        reservation_time__lt=timezone.now()
+    ).order_by('-reservation_time')
+    
+    context = {
+        'user': user,
+        'current_reservations': current_reservations,
+        'past_reservations': past_reservations,
+    }
+    return render(request, 'user_profile.html', context)
 
 def user_signup(request):
     if request.method == 'POST':
@@ -185,30 +232,43 @@ def user_logout(request):
     auth_logout(request)
     return redirect('home')
 
+#reserve
+@login_required
+def seat_map(request, cafe_id):
+    cafe = get_object_or_404(Cafe, id=cafe_id)
+    seats = Seat.objects.filter(cafe_id=cafe_id)
+    template_name = f'seat_map/seat_map_{cafe_id}.html' 
+    
+    return render(request, template_name, {'cafe': cafe, 'seats': seats})
+
 @login_required
 def reservation_create(request, cafe_id, seat_id):
+    user = request.user
+    template_name = f'seat_map/seat_map_{cafe_id}.html' 
+    cafe = get_object_or_404(Cafe, id=cafe_id)
+    seats = Seat.objects.filter(cafe_id=cafe_id)
+
     if request.method == 'POST':
         cafe = get_object_or_404(Cafe, cafe_id=cafe_id)
         seat = get_object_or_404(Seat, id=seat_id)
+        user = request.user
 
         reservation = Reservation.objects.create(
-            user=request.user,
+            user=user,
             cafe=cafe,
             seat=seat,
-            reservation_time=request.POST.get('reservation_time'),
+            reservation_time=timezone.now(),
             number_of_people=request.POST.get('number_of_people'),
-            status='reserved'
+            status='reserved',
         )
         reservation.save()
 
         return redirect('reservation_success')
 
-    return render(request, 'reservation_create.html') #추가 수정 필요
+    return render(request, template_name, {'cafe': cafe, 'seats': seats})
 
-@login_required
 def reservation_success(request):
-    messages.success(request, '예약이 성공적으로 완료되었습니다.')
-    return redirect('home')
+    return render(request, 'reservation_success.html') 
 
 @login_required
 def reservation_detail(request, reservation_id):
@@ -217,3 +277,66 @@ def reservation_detail(request, reservation_id):
 
 def startview(request):
     return render(request, 'start.html')
+
+
+#store
+
+
+@login_required
+def seat_overview(request, cafe_id):
+    seats = Seat.objects.all()
+    cafe = get_object_or_404(Cafe, id=cafe_id)
+    return render(request, 'reservations/seat_overview.html', {'cafe': cafe,'seats': seats, 'user': request.user})
+
+@login_required
+def update_seat_status(request, seat_id):
+    if request.method == 'POST':
+        try:
+            seat = get_object_or_404(Seat, id=seat_id)
+            data = json.loads(request.body)
+            status = data.get('status')
+
+            if status == 'occupied':
+                seat.seat_status = 'occupied'
+                seat.seat_start_time = timezone.now()
+            elif status == 'reserved':
+                seat.seat_status = 'reserved'
+                seat.reserved_by = request.user
+            elif status == 'available':
+                seat.seat_status = 'available'
+                seat.seat_start_time = None
+                seat.reserved_by = None
+            else:
+                return JsonResponse({'success': False, 'error': 'Invalid status'}, status=400)
+
+            seat.save()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+@login_required
+def confirm_reservation(request, seat_id):
+    seat = get_object_or_404(Seat, id=seat_id)
+    seat.seat_status = 'reserved'
+    seat.reserved_by = request.user
+    seat.save()
+    return redirect('seat_overview')
+
+@login_required
+def cancel_reservation(request, seat_id):
+    seat = get_object_or_404(Seat, id=seat_id)
+    seat.seat_status = 'available'
+    seat.reserved_by = None
+    seat.seat_start_time = None
+    seat.save()
+    return redirect('seat_overview')
+
+@login_required
+def seat_check(request, seat_id):
+    seat = get_object_or_404(Seat, id=seat_id)
+    if seat.seat_status == 'reserved':
+        seat.seat_status = 'occupied'
+        seat.seat_start_time = timezone.now()
+    seat.save()
+    return redirect('seat_overview')

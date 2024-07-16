@@ -17,9 +17,13 @@
                     id="search-input"
                 />
             </form>
+            <div class="filter-buttons">
+                <button id="filter-plug" class="btn">플러그</button>
+                <button id="filter-backseat" class="btn">등받이</button>
+            </div>
             <ul id="results-list">
-                {% for Cafe in Cafes %}
-                <li><a href="{% url 'cafe_detail' cafe.id %}">{{ cafe.name }}</a> - {{ cafe.address }}</li>
+                {% for cafe in cafes %}
+                <li><a href="{% url 'cafe_detail' cafe.id %}">{{ cafe.cafe_name }}</a> - {{ cafe.cafe_address }}</li>
                 {% empty %}
                 <li>검색 결과가 없습니다.</li>
                 {% endfor %}
@@ -31,12 +35,38 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
+        var filterPlug = false;
+        var filterBackseat = false;
+
         $('#search-input').on('input', function () {
-            var query = $(this).val();
+            searchCafes();
+        });
+
+        $('#filter-plug').on('click', function (e) {
+            e.preventDefault();
+            filterPlug = !filterPlug;
+            $(this).toggleClass('active');
+            searchCafes();
+        });
+
+        $('#filter-backseat').on('click', function (e) {
+            e.preventDefault();
+            filterBackseat = !filterBackseat;
+            $(this).toggleClass('active');
+            searchCafes();
+        });
+
+        function searchCafes() {
+            var query = $('#search-input').val();
+            var filtersApplied = filterPlug || filterBackseat;
+
             $.ajax({
                 url: "{% url 'ajax_search' %}",
                 data: {
                     q: query,
+                    plug: filterPlug,
+                    backseat: filterBackseat,
+                    filtersApplied: filtersApplied,
                 },
                 dataType: 'json',
                 success: function (data) {
@@ -45,7 +75,13 @@
                     if (data.length > 0) {
                         data.forEach(function (cafe) {
                             resultsList.append(
-                                '<li><a href="/cafe/' + cafe.id + '/">' + cafe.name + '</a> - ' + cafe.address + '</li>'
+                                '<li><a href="/cafe/' +
+                                    cafe.id +
+                                    '/">' +
+                                    cafe.cafe_name +
+                                    '</a> - ' +
+                                    cafe.cafe_address +
+                                    '</li>'
                             );
                         });
                     } else {
@@ -53,7 +89,7 @@
                     }
                 },
             });
-        });
+        }
     });
 </script>
 
