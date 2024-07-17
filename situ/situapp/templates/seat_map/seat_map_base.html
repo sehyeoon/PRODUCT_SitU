@@ -19,6 +19,10 @@
                 <p>잔여석: {{ cafe.empty_seats }}</p>
             </div>
         </div>
+        <div class="floor-selection">
+            <button id="floor1Button" class="floor-button active" onclick="showFloor('floor1')">1층</button>
+            <button id="floor2Button" class="floor-button" onclick="showFloor('floor2')">2층</button>
+        </div>
         <hr />
         <script src="{% static 'js/seat_map.js' %}"></script>
         {% endblock %} {% block footer %}

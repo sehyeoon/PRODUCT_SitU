@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     var popup = document.getElementById('popup');
-    var popupContent = document.getElementById('popup-content');
     var seatInfo = document.getElementById('seat-info');
     var reserveSeatButton = document.getElementById('reserveSeatButton');
     var closeButton = document.getElementById('popup-close');
@@ -14,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (seatId && seatId !== '') {
                 selectedSeatId = seatId;
-                seatInfo.textContent = seatNo + '번 자리 선택완료';
+                seatInfo.textContent = seatNo + '번 자리 선택 완료';
                 popup.style.display = 'block';
             } else {
                 console.error('Seat ID is empty or not set');
@@ -46,4 +45,28 @@ document.addEventListener('DOMContentLoaded', function () {
             selectedSeatId = null;
         });
     }
+});
+
+function showFloor(floor) {
+    console.log('Showing floor: ', floor);
+    document.getElementById('floor1').style.display = 'none';
+    document.getElementById('floor2').style.display = 'none';
+    document.getElementById('floor1Button').classList.remove('active');
+    document.getElementById('floor2Button').classList.remove('active');
+
+    document.getElementById(floor).style.display = 'block';
+
+    if (floor === 'floor1') {
+        document.getElementById('floor1Button').classList.add('active');
+        document.getElementById('floor2Button').classList.remove('active');
+    } else if (floor === 'floor2') {
+        document.getElementById('floor2Button').classList.add('active');
+        document.getElementById('floor1Button').classList.remove('active');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('floor2Button').addEventListener('click', function () {
+        showFloor('floor2');
+    });
 });

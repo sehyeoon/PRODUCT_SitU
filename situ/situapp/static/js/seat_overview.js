@@ -69,7 +69,7 @@ function updateSeatVisual(seatElement, status) {
         }
     } else if (status === 'occupied') {
         chairs.forEach((chair) => {
-            chair.style.backgroundColor = '#333333';
+            chair.style.backgroundColor = '#4A4949';
             chair.classList.remove('reserved');
         });
         if (table) {
@@ -155,5 +155,40 @@ document.addEventListener('DOMContentLoaded', function () {
     popupCloseButton.addEventListener('click', function () {
         var popupElement = document.getElementById('popup');
         popupElement.classList.remove('active');
+    });
+});
+
+function showFloor(floor) {
+    console.log('Showing floor: ', floor);
+    document.getElementById('floor1').style.display = 'none';
+    document.getElementById('floor2').style.display = 'none';
+    document.getElementById('floor1Button').classList.remove('active');
+    document.getElementById('floor2Button').classList.remove('active');
+
+    document.getElementById(floor).style.display = 'block';
+
+    if (floor === 'floor1') {
+        document.getElementById('floor1Button').classList.add('active');
+        document.getElementById('floor2Button').classList.remove('active');
+    } else if (floor === 'floor2') {
+        document.getElementById('floor2Button').classList.add('active');
+        document.getElementById('floor1Button').classList.remove('active');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('floor2Button').addEventListener('click', function () {
+        showFloor('floor2');
+    });
+});
+document.addEventListener('DOMContentLoaded', function () {
+    const confirmButtons = document.querySelectorAll('.btn-success');
+
+    confirmButtons.forEach((button) => {
+        button.addEventListener('click', function (event) {
+            if (!confirm('Do you really want to confirm this reservation?')) {
+                event.preventDefault();
+            }
+        });
     });
 });

@@ -116,9 +116,11 @@ def reservation_success(request):
 
 @login_required
 def seat_overview(request, cafe_id):
-    seats = Seat.objects.all()
+    seats = Seat.objects.filter(cafe_id=cafe_id)
     cafe = get_object_or_404(Cafe, id=cafe_id)
-    return render(request, 'reservations/seat_overview.html', {'cafe': cafe,'seats': seats, 'user': request.user})
+    reservations = Reservation.objects.filter(seat__cafe_id=cafe_id, status='예약중')
+    return render(request, 'reservations/seat_overview.html', {'cafe': cafe, 'seats': seats, 'reservations': reservations, 'user': request.user})
+
 
 @login_required
 def update_seat_status(request, seat_id):
@@ -147,13 +149,18 @@ def update_seat_status(request, seat_id):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
 
+
 @login_required
-def confirm_reservation(request, seat_id):
+def confirm_reservation(request, reservation_id, seat_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id)
+    reservation.status = '사용중'  # '예약중'에서 '사용중'으로 변경
+    reservation.save()
+
     seat = get_object_or_404(Seat, id=seat_id)
     seat.seat_status = 'reserved'
-    seat.reserved_by = request.user
     seat.save()
-    return redirect('seat_overview')
+    
+    return redirect('seat_overview', cafe_id=seat.cafe.id)
 
 @login_required
 def cancel_reservation(request, seat_id):
