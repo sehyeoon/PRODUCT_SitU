@@ -23,60 +23,62 @@
             </div>
 
             <div id="nearby-cafes">
+                {% if nearby_cafes %} {% for cafe in nearby_cafes %}
+                <div class="card mb-3">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="{{ cafe.cafe_photo }}" class="card-img" alt="{{ cafe.cafe_name }}" />
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ cafe.cafe_name }} <small>{{ cafe.distance }}km</small></h5>
+                                <p class="card-text">
+                                    {{ cafe.cafe_time }}<br />
+                                    잔여석: {{ cafe.empty_seats }}
+                                </p>
+                                <a href="/cafe/{{ cafe.cafe_id }}/" class="btn btn-sm btn-primary">자리잡기</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %} {% else %}
                 <p>주변에 빈자리 있는 카페가 없습니다.</p>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    document.getElementById('current-location-button').addEventListener('click', function () {
+    function getCurrentLocationAndRedirect() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var lat = position.coords.latitude;
-                var lng = position.coords.longitude;
-                fetch(`?lat=${lat}&lng=${lng}`, {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        var cafesContainer = document.getElementById('nearby-cafes');
-                        cafesContainer.innerHTML = '';
-
-                        if (data.length > 0) {
-                            data.forEach((cafe) => {
-                                var cafeElement = `
-                                    <div class="card mb-3">
-                                        <div class="row no-gutters">
-                                            <div class="col-md-4">
-                                                <img src="${cafe.cafe_photo}" class="card-img" alt="${cafe.cafe_name}" />
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">${cafe.cafe_name} <small>${cafe.distance}km</small></h5>
-                                                    <p class="card-text">
-                                                        ${cafe.cafe_time}<br />
-                                                        잔여석: ${cafe.empty_seats}
-                                                    </p>
-                                                    <a href="/cafe/${cafe.cafe_id}/" class="btn btn-sm btn-primary">자리잡기</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                                cafesContainer.insertAdjacentHTML('beforeend', cafeElement);
-                            });
-                        } else {
-                            cafesContainer.innerHTML = '<p>주변에 빈자리 있는 카페가 없습니다.</p>';
-                        }
-                    })
-                    .catch((error) => console.error('Error:', error));
-            });
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    window.location.href = `?lat=${lat}&lng=${lng}`;
+                },
+                function (error) {
+                    console.error('Error getting location:', error);
+                    alert('Error getting location. Please try again later.');
+                }
+            );
         } else {
             alert('Geolocation is not supported by this browser.');
         }
+    }
+
+    // URL에 이미 lat와 lng 매개변수가 있는지 확인
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasLatLng = urlParams.has('lat') && urlParams.has('lng');
+
+    if (!hasLatLng) {
+        // URL에 매개변수가 없으면 위치 기반 검색 수행
+        getCurrentLocationAndRedirect();
+    }
+
+    document.getElementById('current-location-button').addEventListener('click', function () {
+        getCurrentLocationAndRedirect();
     });
 </script>
 {% endblock %}

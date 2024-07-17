@@ -12,7 +12,29 @@ import json
 
 def home(request):
     areas = ['정후', '참살이', '정문', '제기동', '개운사길', '옆살이', '이공계']
-    nearby_cafes = Cafe.objects.all()
+    nearby_cafes = []
+
+    user_lat = request.GET.get('lat')
+    user_lng = request.GET.get('lng')
+    
+    if user_lat and user_lng:
+        user_lat = float(user_lat)
+        user_lng = float(user_lng)
+        for cafe in Cafe.objects.all():
+            if cafe.latitude and cafe.longitude:
+                cafe_location = (cafe.latitude, cafe.longitude)
+                user_location = (user_lat, user_lng)
+                dist = distance(user_location, cafe_location).km
+                if dist <= 3:
+                    nearby_cafes.append({
+                        'cafe_id': cafe.cafe_id,
+                        'cafe_name': cafe.cafe_name,
+                        'cafe_time': cafe.cafe_time,
+                        'empty_seats': cafe.empty_seats,
+                        'cafe_photo': cafe.cafe_photo.url if cafe.cafe_photo else '',
+                        'distance': round(dist, 2)
+                    })
+
     context = {
         'areas': areas,
         'nearby_cafes': nearby_cafes,
@@ -281,6 +303,21 @@ def startview(request):
 
 #store
 
+def cafe_login(request):
+    if request.method == 'POST':
+        cafe_id = request.POST.get('cafe_id')
+        cafe_pw = request.POST.get('cafe_pw')
+        try:
+            cafe = Cafe.objects.get(cafe_id=cafe_id)
+            if cafe.cafe_pw == cafe_pw:
+                # 로그인 성공 처리
+                request.session['cafe_id'] = cafe.id
+                return redirect('cafe_dashboard')  # 로그인 후 리다이렉트할 페이지
+            else:
+                messages.error(request, '비밀번호가 올바르지 않습니다.')
+        except Cafe.DoesNotExist:
+            messages.error(request, '존재하지 않는 카페 ID입니다.')
+    return render(request, 'cafe_login.html')
 
 @login_required
 def seat_overview(request, cafe_id):

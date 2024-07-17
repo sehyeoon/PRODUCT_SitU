@@ -28,8 +28,7 @@
             <ul>
                 {% for reservation in past_reservations %}
                 <li>
-                    {{ reservation.cafe.cafe_name }} - 좌석 번호: {{ reservation.seat.seats_no }} - 예약 시간: {{
-                    reservation.reservation_time }}
+                    {{ reservation.cafe.cafe_name }} - 좌석 번호: {{ reservation.seat.seats_no }}
                 </li>
                 {% endfor %}
             </ul>

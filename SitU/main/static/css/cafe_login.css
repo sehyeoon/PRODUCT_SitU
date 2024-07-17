@@ -1,0 +1,147 @@
+/* cafe_login.css */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.screen {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.div {
+    background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.overlap {
+    text-align: center;
+    margin-top: 10vh;
+    margin-bottom: 5vh;
+}
+
+.text-wrapper {
+    font-family: 'Pretendard-Black', Helvetica;
+    font-weight: 900;
+    color: #ff8244;
+    font-size: 15vw;
+    letter-spacing: -0.5vw;
+    line-height: normal;
+}
+
+.text-wrapper-2 {
+    font-family: 'Pretendard-Regular', Helvetica;
+    font-weight: 400;
+    color: #ff8244;
+    font-size: 5vw;
+    letter-spacing: -0.2vw;
+    line-height: normal;
+}
+
+.overlap-group {
+    background-color: #ff8244;
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 10vh;
+}
+
+form {
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-group {
+    width: 100%;
+    margin-bottom: 3vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.text-wrapper-3,
+.text-wrapper-4 {
+    font-family: 'Pretendard-ExtraBold', Helvetica;
+    font-weight: 800;
+    color: #ffffff;
+    font-size: 5vw;
+    letter-spacing: -0.2vw;
+    margin-bottom: 1vh;
+    white-space: nowrap;
+}
+
+.rectangle,
+.rectangle-2 {
+    height: 7vh;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 31px;
+    border: none;
+    padding: 0 20px;
+    font-size: 16px;
+}
+
+.overlap-2 {
+    width: 100%;
+    margin-top: 5vh;
+}
+
+.rectangle-3 {
+    height: 7vh;
+    background-color: #ff8244;
+    border: 3px solid #ffffff;
+    border-radius: 31px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.text-wrapper-5 {
+    font-family: 'Pretendard-ExtraBold', Helvetica;
+    font-weight: 800;
+    color: #ffffff;
+    font-size: 5vw;
+    letter-spacing: -0.2vw;
+    text-align: center;
+    white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+    .text-wrapper {
+        font-size: 110px;
+    }
+
+    .text-wrapper-2 {
+        font-size: 40px;
+    }
+
+    .text-wrapper-3,
+    .text-wrapper-4,
+    .text-wrapper-5 {
+        font-size: 36px;
+    }
+
+    .rectangle,
+    .rectangle-2,
+    .rectangle-3 {
+        height: 60px;
+    }
+}

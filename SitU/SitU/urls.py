@@ -26,4 +26,5 @@ urlpatterns = [
     path('confirm_reservation/<int:seat_id>/', views.confirm_reservation, name='confirm_reservation'),
     path('cancel_reservation/<int:seat_id>/', views.cancel_reservation, name='cancel_reservation'),
     path('seat_check/<int:seat_id>/', views.seat_check, name='seat_check'),
+    path('login/cafe/', views.cafe_login, name='cafe_login'),
 ]

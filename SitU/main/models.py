@@ -95,7 +95,7 @@ class Reservation(models.Model):
     cafe = models.ForeignKey(Cafe, to_field='id', on_delete=models.CASCADE, related_name='reservations')
     noneuser_tel = models.CharField(max_length=20, null=True, blank=True)
     seat = models.ForeignKey(Seat, to_field='id', on_delete=models.CASCADE, related_name='reservations')
-    reservation_time = models.DateTimeField(default=timezone.now)  # 기본값 설정
+    reservation_time = models.DateTimeField(default=timezone.now)
     number_of_people = models.IntegerField(default=1)  # 기본값 설정
     status = models.CharField(
         max_length=10,
