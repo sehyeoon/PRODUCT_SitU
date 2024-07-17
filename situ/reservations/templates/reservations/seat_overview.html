@@ -2,6 +2,23 @@
 <html>
 <head>
     <title>Seat Overview</title>
+    <script>
+        function updateUseTime() {
+            const now = new Date();
+            document.querySelectorAll('.seat-start-time').forEach(function(startElem) {
+                const startTime = new Date(startElem.getAttribute('data-start-time'));
+                if (!isNaN(startTime.getTime())) {
+                    const diffMs = now - startTime;
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const useTimeElem = startElem.nextElementSibling;
+                    useTimeElem.textContent = diffMins + ' minutes';
+                }
+            });
+        }
+
+        setInterval(updateUseTime, 60000);
+        window.onload = updateUseTime;
+    </script>
 </head>
 <body>
     <h1>안녕하세요, {{ user.name }} 사장님!</h1>
@@ -26,10 +43,16 @@
                     N/A
                 {% endif %}
             </td>
-            <td>{{ seat.seat_start_time }}</td>
+            <td class="seat-start-time" data-start-time="{{ seat.seat_start_time|date:'c' }}">
+                {% if seat.seat_start_time %}
+                {{ seat.seat_start_time }}
+                {% else %}
+                None
+                {% endif %}
+            </td>
             <td>
                 {% if seat.seat_start_time %}
-                {{ seat.seat_start_time|timeuntil }}
+                0 minutes
                 {% else %}
                 N/A
                 {% endif %}
