@@ -109,11 +109,21 @@ def all_cafes(request):
             'cafes': sorted_cafes,
         }
         return render(request, 'region.html', context)
-
+    
 def cafe_detail(request, cafe_id):
     cafe = get_object_or_404(Cafe, cafe_id=cafe_id)
     seats = Seat.objects.filter(cafe=cafe)
-    return render(request, 'cafe_detail.html', {'cafe': cafe, 'seats': seats})
+    is_liked = False
+    if request.user.is_authenticated:
+        is_liked = Favorite.objects.filter(user=request.user, cafe=cafe, liked=True).exists()
+    
+    if request.method == 'POST' and request.user.is_authenticated:
+        favorite, created = Favorite.objects.get_or_create(user=request.user, cafe=cafe)
+        favorite.liked = not favorite.liked
+        favorite.save()
+        return JsonResponse({'success': True, 'liked': favorite.liked})
+    
+    return render(request, 'cafe_detail.html', {'cafe': cafe, 'seats': seats, 'is_liked': is_liked})
 
 def cafe_region(request, region_id):
     cafes = Cafe.objects.filter(cafe_region=region_id)
@@ -153,34 +163,41 @@ def ajax_search(request):
 @login_required
 def user_likes(request, user_id):
     user = get_object_or_404(User, id=user_id)
-    likes = Favorite.objects.filter(user=user)
-    return render(request, 'user_likes.html', {'likes': likes})
+    likes = Favorite.objects.filter(user=user, liked=True).select_related('cafe')  # select_related를 사용하여 관련된 cafe 객체를 미리 불러옵니다.
+    return render(request, 'user_likes.html', {'user': user, 'likes': likes})
+
 
 @login_required
 def like_cafe(request, cafe_id):
-    cafe = get_object_or_404(Cafe, cafe_id=cafe_id)
+    cafe = get_object_or_404(Cafe, id=cafe_id)
     user = request.user
-
     favorite, created = Favorite.objects.get_or_create(user=user, cafe=cafe)
+    
     if not created:
         favorite.liked = not favorite.liked
         favorite.save()
+    else:
+        favorite.liked = True
+        favorite.save()
 
-    return redirect('cafe_detail', cafe_id=cafe_id)
+    return JsonResponse({'success': True, 'liked': favorite.liked})
 
-def user_profile(request, User_id):
-    if User_id == 0:
+
+@login_required
+def user_profile(request, user_id):
+    if user_id == 0:
         return redirect('user_login')
-    user = get_object_or_404(User, id=User_id)
+    
+    user = get_object_or_404(User, id=user_id)
+    
     current_reservations = Reservation.objects.filter(
         user=user,
-        reservation_time__gte=timezone.now()
+        seat__seat_status__in=['requesting', 'reserved', 'occupied']
     ).order_by('reservation_time')
     
-    # 현재 시간 이전의 예약을 가져옵니다 (과거 예약)
     past_reservations = Reservation.objects.filter(
         user=user,
-        reservation_time__lt=timezone.now()
+        seat__seat_status='available'
     ).order_by('-reservation_time')
     
     context = {
@@ -189,6 +206,7 @@ def user_profile(request, User_id):
         'past_reservations': past_reservations,
     }
     return render(request, 'user_profile.html', context)
+
 
 def user_signup(request):
     if request.method == 'POST':
@@ -266,28 +284,31 @@ def seat_map(request, cafe_id):
 @login_required
 def reservation_create(request, cafe_id, seat_id):
     user = request.user
-    template_name = f'seat_map/seat_map_{cafe_id}.html' 
+    template_name = f'seat_map/seat_map_{cafe_id}.html'
     cafe = get_object_or_404(Cafe, id=cafe_id)
     seats = Seat.objects.filter(cafe_id=cafe_id)
 
     if request.method == 'POST':
-        cafe = get_object_or_404(Cafe, cafe_id=cafe_id)
         seat = get_object_or_404(Seat, id=seat_id)
-        user = request.user
-
+        
+        # Create the reservation
         reservation = Reservation.objects.create(
             user=user,
             cafe=cafe,
             seat=seat,
             reservation_time=timezone.now(),
-            number_of_people=request.POST.get('number_of_people'),
-            status='reserved',
+            number_of_people=request.POST.get('number_of_people')
         )
-        reservation.save()
+        
+        # Update the seat status to 'requesting'
+        seat.seat_status = 'requesting'
+        seat.save()
 
         return redirect('reservation_success')
 
     return render(request, template_name, {'cafe': cafe, 'seats': seats})
+
+
 
 def reservation_success(request):
     return render(request, 'reservation_success.html') 
@@ -333,24 +354,22 @@ def update_seat_status(request, seat_id):
             data = json.loads(request.body)
             status = data.get('status')
 
-            if status == 'occupied':
-                seat.seat_status = 'occupied'
-                seat.seat_start_time = timezone.now()
-            elif status == 'reserved':
-                seat.seat_status = 'reserved'
-                seat.reserved_by = request.user
-            elif status == 'available':
-                seat.seat_status = 'available'
-                seat.seat_start_time = None
-                seat.reserved_by = None
-            else:
+            if status not in ['requesting', 'reserved', 'occupied', 'available']:
                 return JsonResponse({'success': False, 'error': 'Invalid status'}, status=400)
 
+            seat.seat_status = status
+            if status == 'occupied':
+                seat.seat_start_time = timezone.now()
+            elif status == 'available':
+                seat.seat_start_time = None
+                # 완료된 예약으로 간주합니다.
+                Reservation.objects.filter(seat=seat, seat__seat_status='occupied').update(seat__seat_status='available')
             seat.save()
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
 
 @login_required
 def confirm_reservation(request, seat_id):

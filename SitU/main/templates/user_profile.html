@@ -15,7 +15,7 @@
                 {% for reservation in current_reservations %}
                 <li>
                     {{ reservation.cafe.cafe_name }} - 좌석 번호: {{ reservation.seat.seats_no }} - 예약 시간: {{
-                    reservation.reservation_time }}
+                    reservation.reservation_time }} - 상태: {{ reservation.seat.get_seat_status_display }}
                 </li>
                 {% endfor %}
             </ul>

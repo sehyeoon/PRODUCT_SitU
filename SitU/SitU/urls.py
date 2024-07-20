@@ -11,7 +11,7 @@ urlpatterns = [
     path('cafe_region/<int:region_id>/', views.cafe_region, name='cafe_region'),
     path('search/', views.search, name='search'),
     path('like/<int:user_id>/', views.user_likes, name='user_likes'),
-    path('<int:User_id>/', views.user_profile, name='user_profile'),
+    path('<int:user_id>/', views.user_profile, name='user_profile'),
     path('ajax/search/', views.ajax_search, name='ajax_search'),
     path('accounts/', include('allauth.urls')),
     path('social-signup/', views.social_signup, name='social_signup'),

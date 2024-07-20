@@ -50,10 +50,6 @@ class User(AbstractBaseUser, PermissionsMixin):  # PermissionsMixin을 추가하
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
-class TempUser(models.Model):
-    tempuser_tel = models.CharField(max_length=20)
-    temp_pw = models.CharField(max_length=100)
-
 class Cafe(models.Model):
     id = models.AutoField(primary_key=True)
     cafe_id = models.CharField(max_length=50, unique=True)
@@ -74,7 +70,7 @@ class Cafe(models.Model):
 class Seat(models.Model):
     id = models.AutoField(primary_key=True)
     cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE)
-    seat_status = models.CharField(max_length=20, choices=[('available', 'Available'), ('occupied', 'Occupied'), ('reserved', 'Reserved')])
+    seat_status = models.CharField(max_length=20, choices=[('available', 'Available'), ('occupied', 'Occupied'), ('requesting', 'Requesting'), ('reserved', 'Reserved')])
     plug = models.BooleanField(null=True, blank=True)
     backseat = models.BooleanField(null=True, blank=True)
     seat_start_time = models.DateTimeField(null=True, blank=True)
@@ -93,19 +89,9 @@ class Reservation(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, to_field='id', on_delete=models.CASCADE, related_name='reservations')
     cafe = models.ForeignKey(Cafe, to_field='id', on_delete=models.CASCADE, related_name='reservations')
-    noneuser_tel = models.CharField(max_length=20, null=True, blank=True)
     seat = models.ForeignKey(Seat, to_field='id', on_delete=models.CASCADE, related_name='reservations')
     reservation_time = models.DateTimeField(default=timezone.now)
     number_of_people = models.IntegerField(default=1)  # 기본값 설정
-    status = models.CharField(
-        max_length=10,
-        choices=[
-            ('예약중', '예약중'),
-            ('사용중', '사용중'),
-            ('빈자리', '빈자리'),
-        ],
-        default='예약중'
-    )
 
     def __str__(self):
         return f"{self.user.name} - {self.cafe.cafe_name} - {self.seat.seats_no}"

@@ -3,6 +3,10 @@ body {
     background-color: white;
 }
 
+h1 {
+    font-size: 32px;
+}
+
 .card-container {
     display: flex;
     flex-direction: column;
@@ -24,7 +28,8 @@ body {
 }
 
 .card-image {
-    flex: 0 0 33.333%;
+    flex: 0 0 25%;
+    padding: 1%;
 }
 
 .card-img {
@@ -92,4 +97,8 @@ body {
 .btn-primary:focus {
     background-color: #e86a2d !important;
     border-color: #e86a2d !important;
+}
+
+div.container.mt-4.screen {
+    padding: 0px;
 }
