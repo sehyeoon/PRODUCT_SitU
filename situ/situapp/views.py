@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth import get_user,authenticate, login
 from django.contrib.auth.decorators import login_required
-from .models import User, Cafe, Seat, Reservation
+from .models import User, Cafe, Seat, Reservation, Favorite
 from .forms import UserSignupForm
 from django.db.models import Q
 from django.contrib import messages
@@ -61,6 +61,24 @@ def user_logout(request):
     auth_logout(request)
     return redirect('home')
 
+
+@login_required
+def like_cafe(request, cafe_id):
+    if request.method == 'POST':
+        cafe = get_object_or_404(Cafe, cafe_id=cafe_id)
+        user = request.user
+        
+        favorite, created = Favorite.objects.get_or_create(user=user, cafe=cafe)
+        if not created:
+            favorite.liked = not favorite.liked
+            favorite.save()
+        
+        return JsonResponse({'liked': favorite.liked})
+    
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+
 #cafe_detail
 def cafe_detail(request, cafe_id):
     cafe = get_object_or_404(Cafe, id=cafe_id)
@@ -98,17 +116,20 @@ def reservation_create(request, cafe_id, seat_id):
             seat=seat,
             reservation_time=request.POST.get('reservation_time'),
             number_of_people=request.POST.get('number_of_people'),
-            status='reserved',
         )
         reservation.save()
+        
+        seat.seat_status = 'requesting'
+        seat.save()
+    
 
         return redirect('reservation_success.html')
 
     return render(request, template_name, {'cafe': cafe, 'seats': seats})
 
+
 def reservation_success(request):
     return render(request, 'reservation_success.html') 
-
 
 
 #store
@@ -118,7 +139,7 @@ def reservation_success(request):
 def seat_overview(request, cafe_id):
     seats = Seat.objects.filter(cafe_id=cafe_id)
     cafe = get_object_or_404(Cafe, id=cafe_id)
-    reservations = Reservation.objects.filter(seat__cafe_id=cafe_id, status='예약중')
+    reservations = Reservation.objects.filter(seat__cafe_id=cafe_id)
     return render(request, 'reservations/seat_overview.html', {'cafe': cafe, 'seats': seats, 'reservations': reservations, 'user': request.user})
 
 
@@ -153,9 +174,6 @@ def update_seat_status(request, seat_id):
 @login_required
 def confirm_reservation(request, reservation_id, seat_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
-    reservation.status = '사용중'  # '예약중'에서 '사용중'으로 변경
-    reservation.save()
-
     seat = get_object_or_404(Seat, id=seat_id)
     seat.seat_status = 'reserved'
     seat.save()
@@ -165,11 +183,14 @@ def confirm_reservation(request, reservation_id, seat_id):
 @login_required
 def cancel_reservation(request, seat_id):
     seat = get_object_or_404(Seat, id=seat_id)
-    seat.seat_status = 'available'
-    seat.reserved_by = None
+    cafe_id = seat.cafe.id  # 카페 ID를 가져옵니다
+    
+    seat.seat_status = 'available'    
+    seat.requesting_by = None
     seat.seat_start_time = None
     seat.save()
-    return redirect('seat_overview')
+    
+    return redirect('seat_overview',cafe_id=cafe_id)
 
 @login_required
 def seat_check(request, seat_id):

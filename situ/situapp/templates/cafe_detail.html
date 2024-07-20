@@ -6,6 +6,7 @@
     <title>Document</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/cafe.css' %}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="title">
@@ -13,9 +14,12 @@
             <p class="cafe_time">{{ cafe.cafe_time }}</p>
             <h1 class="cafe_name">{{ cafe.cafe_name }}</h1>
         </div>
-        <div class="empty_seat">
+        <div class="heart_seats">
+            <img src="{% static 'images/Heart.png' %}" class="heart-icon" id="likeButton" data-cafe-id="{{ cafe.id }}">
+            <div class="empty_seat">
             <p>잔여석: {{ cafe.empty_seats }} </p>
         </div>
+    </div>
     </div>
     <div class="location">
         <h3>위치</h3>

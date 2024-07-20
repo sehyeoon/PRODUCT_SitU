@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 newStatus = 'occupied';
             } else if (currentStatus === 'occupied') {
                 newStatus = 'available';
+            } else if (currentStatus === 'requesting') {
+                newStatus = 'reserved';
             } else {
                 console.error('Unknown current status:', currentStatus);
                 return;
@@ -51,39 +53,65 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-
 function updateSeatVisual(seatElement, status) {
     seatElement.setAttribute('data-status', status);
 
-    const chairs = seatElement.querySelectorAll('.seat.chair');
-    const table = seatElement.querySelector('.seat.table');
+    const chairs = seatElement.querySelectorAll('.chair');
+    const table = seatElement.querySelector('.table');
 
     if (status === 'reserved') {
         chairs.forEach((chair) => {
             chair.style.backgroundColor = '#ff8244';
+            chair.style.color = 'white';
+            chair.style.border = '2px solid #ff8244';
             chair.classList.add('reserved');
         });
         if (table) {
             table.style.backgroundColor = '#ff8244';
+            table.style.color = 'white';
+            table.style.border = '2px solid #ff8244';
             table.classList.add('reserved');
         }
     } else if (status === 'occupied') {
         chairs.forEach((chair) => {
-            chair.style.backgroundColor = '#4A4949';
+            chair.style.backgroundColor = '#4a4a4a';
+            chair.style.color = '#ffffff';
+            chair.style.border = '2px solid #4a4a4a';
             chair.classList.remove('reserved');
         });
         if (table) {
-            table.style.backgroundColor = '#333333';
+            table.style.backgroundColor = '#4a4a4a';
+            table.style.color = '#ffffff';
+            table.style.border = '2px solid #4a4a4a';
             table.classList.remove('reserved');
+        }
+    } else if (status === 'requesting') {
+        chairs.forEach((chair) => {
+            chair.style.backgroundColor = '#ffffff';
+            chair.style.color = '#4a4a4a';
+            chair.style.border = '2px solid #4a4a4a';
+            chair.classList.add('requesting');
+        });
+        if (table) {
+            table.style.backgroundColor = '#ffffff';
+            table.style.color = '#4a4a4a';
+            table.style.border = '2px solid #4a4a4a';
+            table.classList.add('requesting');
         }
     } else {
         chairs.forEach((chair) => {
-            chair.style.backgroundColor = '';
+            chair.style.backgroundColor = 'white';
+            chair.style.color = '#ff8244';
+            chair.style.border = '2px solid #ff8244';
             chair.classList.remove('reserved');
+            chair.classList.remove('requesting');
         });
         if (table) {
-            table.style.backgroundColor = '';
+            table.style.backgroundColor = 'white';
+            table.style.color = '#ff8244';
+            table.style.border = '2px solid #ff8244';
             table.classList.remove('reserved');
+            table.classList.remove('requesting');
         }
     }
 }
@@ -104,60 +132,50 @@ function getCookie(name) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    // 모든 좌석 요소 가져오기
     var seats = document.querySelectorAll('.seat');
+    var popupElement = document.getElementById('popup');
 
     seats.forEach(function (seat) {
         seat.addEventListener('mouseover', function () {
-            // 좌석 ID 가져오기
             var seatId = seat.getAttribute('id');
-            // 좌석 상태 가져오기
             var seatStatus = seat.getAttribute('data-status');
-            // 입장 시각 가져오기 (예시로 start_time이라는 속성을 가정)
             var startTime = seat.getAttribute('data-start-time');
+            var useTime = seat.getAttribute('data-use-time');
 
-            // 팝업 내용을 채우기
-            var seatInfoElement = document.getElementById('seat-info');
-            seatInfoElement.textContent = seatId + '번 자리 좌석 이용 현황';
+            document.getElementById('seat-info').textContent = seatId + '번 자리 좌석 이용 현황';
+            document.getElementById('seat-status').textContent = '좌석 상태: ' + getSeatStatusText(seatStatus);
+            document.getElementById('seat-start-time').textContent = '입장 시각: ' + startTime;
+            document.getElementById('seat-use-time').textContent = '사용 시간: ' + useTime;
 
-            var popupContentElement = document.getElementById('popup-content');
-            var popupStatus = popupContentElement.querySelector('p');
-
-            if (seatStatus === 'available') {
-                popupStatus.textContent = '좌석 상태: 사용 가능';
-            } else if (seatStatus === 'reserved') {
-                popupStatus.textContent = '좌석 상태: 예약됨';
-            } else if (seatStatus === 'occupied') {
-                popupStatus.textContent = '좌석 상태: 사용 중';
-            }
-
-            var popupStartTime = popupContentElement.querySelector('p:nth-child(2)');
-            if (startTime) {
-                popupStartTime.textContent = '입장 시각: ' + startTime;
-            } else {
-                popupStartTime.textContent = '';
-            }
-
-            // 팝업 열기
-            var popupElement = document.getElementById('popup');
             popupElement.classList.add('active');
         });
-
-        seat.addEventListener('mouseout', function () {
-            // 팝업 닫기
-            var popupElement = document.getElementById('popup');
-            popupElement.classList.remove('active');
-        });
     });
 
-    // 팝업 닫기 버튼 설정
-    var popupCloseButton = document.getElementById('popup-close');
-    popupCloseButton.addEventListener('click', function () {
-        var popupElement = document.getElementById('popup');
-        popupElement.classList.remove('active');
-    });
+    function getSeatStatusText(status) {
+        switch (status) {
+            case 'available':
+                return '사용 가능';
+            case 'reserved':
+                return '예약됨';
+            case 'occupied':
+                return '사용 중';
+            case 'requesting':
+                return '예약 요청 중';
+            default:
+                return '알 수 없음';
+        }
+    }
 });
 
+function closePopup() {
+    document.getElementById('popup').classList.remove('active');
+}
+
+// 팝업 닫기 버튼 설정
+var popupCloseButton = document.getElementById('popup-close');
+popupCloseButton.addEventListener('click', closePopup);
+var popupCloseButton = document.getElementById('popup-close');
+popupCloseButton.addEventListener('click', closePopup);
 function showFloor(floor) {
     console.log('Showing floor: ', floor);
     document.getElementById('floor1').style.display = 'none';
@@ -181,12 +199,22 @@ document.addEventListener('DOMContentLoaded', function () {
         showFloor('floor2');
     });
 });
+
 document.addEventListener('DOMContentLoaded', function () {
-    const confirmButtons = document.querySelectorAll('.btn-success');
+    const confirmButtons = document.querySelectorAll('.button_success');
+    const cancelButtons = document.querySelectorAll('.button_cancel');
 
     confirmButtons.forEach((button) => {
         button.addEventListener('click', function (event) {
-            if (!confirm('Do you really want to confirm this reservation?')) {
+            if (!confirm('예약 요청을 승인하시겠습니까?')) {
+                event.preventDefault();
+            }
+        });
+    });
+
+    cancelButtons.forEach((button) => {
+        button.addEventListener('click', function (event) {
+            if (!confirm('예약 요청을 취소하시겠습니까?')) {
                 event.preventDefault();
             }
         });

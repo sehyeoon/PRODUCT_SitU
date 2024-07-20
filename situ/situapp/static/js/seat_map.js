@@ -3,17 +3,36 @@ document.addEventListener('DOMContentLoaded', function () {
     var seatInfo = document.getElementById('seat-info');
     var reserveSeatButton = document.getElementById('reserveSeatButton');
     var closeButton = document.getElementById('popup-close');
-    var selectedSeatId = this.id;
+    var selectedSeatId = '';
 
     document.querySelectorAll('.seat').forEach(function (seat) {
         seat.addEventListener('click', function () {
             var seatId = this.id;
             var seatNo = this.querySelector('.seat.table').textContent;
+            var plug = this.dataset.plug === 'True';
+            var backseat = this.dataset.backseat === 'True';
+
+            var status = this.getAttribute('data-status');
+            if (status !== 'available') {
+                alert('현재 이 좌석은 다른 고객님이 이용 중인 좌석입니다. 다른 좌석을 선택해 주세요!');
+                return; // 상태가 'available'이 아니면 함수 종료
+            }
             console.log('Clicked seat ID:', seatId);
 
             if (seatId && seatId !== '') {
                 selectedSeatId = seatId;
-                seatInfo.textContent = seatNo + '번 자리 선택 완료';
+
+                seatInfo.innerHTML = `
+                <div>${seatNo}번 자리 선택 완료</div>
+                <div class="seat-features-container">
+                  <span class="seat-feature ${plug ? 'available' : 'unavailable'}">플러그${plug ? 'O' : 'X'}</span> 
+                  <span class="seat-feature ${backseat ? 'available' : 'unavailable'}">등받이${
+                    backseat ? 'O' : 'X'
+                }</span>
+                </div>
+              `;
+
+                document.getElementById('popup-seat-id').value = seatId;
                 popup.style.display = 'block';
             } else {
                 console.error('Seat ID is empty or not set');
