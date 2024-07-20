@@ -31,11 +31,13 @@ urlpatterns = [
     path('cafe/<int:cafe_id>/seats/', views.seat_map, name='seat_map'),
     path('reservation/create/<int:cafe_id>/<int:seat_id>/', views.reservation_create, name='reservation_create'),
     path('reservation_success/', views.reservation_success, name='reservation_success'),  # Add this line
+    
     path('cafe/<int:cafe_id>/seat_overview', views.seat_overview, name='seat_overview'),  # Add this line
     path('update_seat_status/<int:seat_id>/', views.update_seat_status, name='update_seat_status'),
-    path('confirm_reservation/<int:reservation_id>/<int:seat_id>/', views.confirm_reservation, name='confirm_reservation'),
-    path('cancel_reservation/<int:seat_id>/', views.cancel_reservation, name='cancel_reservation'),
+    path('confirm_reservation/<int:reservation_id>/', views.confirm_reservation, name='confirm_reservation'),
+    path('cancel_reservation/<int:reservation_id>/', views.cancel_reservation, name='cancel_reservation'),
     path('seat_check/<int:seat_id>/', views.seat_check, name='seat_check'),
+    path('cafe/<int:cafe_id>/dashboard', views.dashboard_overview, name='dashboard_overview'),
 ]
 
 

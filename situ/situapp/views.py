@@ -4,14 +4,14 @@ from django.contrib.auth import get_user,authenticate, login
 from django.contrib.auth.decorators import login_required
 from .models import User, Cafe, Seat, Reservation, Favorite
 from .forms import UserSignupForm
-from django.db.models import Q
-from django.contrib import messages
-from django.utils import timezone
 from django.http import JsonResponse,  HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.functional import SimpleLazyObject
-
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Count
 import json
+import pytz
+from django.core.serializers.json import DjangoJSONEncoder
 
 # start
 def startview(request):
@@ -61,7 +61,7 @@ def user_logout(request):
     auth_logout(request)
     return redirect('home')
 
-
+#like
 @login_required
 def like_cafe(request, cafe_id):
     if request.method == 'POST':
@@ -134,7 +134,6 @@ def reservation_success(request):
 
 #store
 
-
 @login_required
 def seat_overview(request, cafe_id):
     seats = Seat.objects.filter(cafe_id=cafe_id)
@@ -172,25 +171,25 @@ def update_seat_status(request, seat_id):
 
 
 @login_required
-def confirm_reservation(request, reservation_id, seat_id):
+def confirm_reservation(request, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
-    seat = get_object_or_404(Seat, id=seat_id)
+    seat = reservation.seat
+    seat_id = reservation.seat.id
     seat.seat_status = 'reserved'
     seat.save()
     
     return redirect('seat_overview', cafe_id=seat.cafe.id)
 
 @login_required
-def cancel_reservation(request, seat_id):
-    seat = get_object_or_404(Seat, id=seat_id)
-    cafe_id = seat.cafe.id  # 카페 ID를 가져옵니다
-    
-    seat.seat_status = 'available'    
-    seat.requesting_by = None
-    seat.seat_start_time = None
+def cancel_reservation(request, reservation_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id)
+    seat = reservation.seat
+    seat_id = reservation.seat.id
+    seat.seat_status = 'available'
+    reservation.delete()
     seat.save()
     
-    return redirect('seat_overview',cafe_id=cafe_id)
+    return redirect('seat_overview', cafe_id=seat.cafe.id )
 
 @login_required
 def seat_check(request, seat_id):
@@ -200,3 +199,65 @@ def seat_check(request, seat_id):
         seat.seat_start_time = timezone.now()
     seat.save()
     return redirect('seat_overview')
+
+#dashboard
+
+@login_required
+def dashboard_overview(request, cafe_id):
+    cafe = Cafe.objects.get(id=cafe_id)
+    seoul_tz = pytz.timezone('Asia/Seoul')
+    today = timezone.now().astimezone(seoul_tz)  
+    
+    start_of_week = today - timezone.timedelta(days=today.weekday())
+    end_of_week = start_of_week + timezone.timedelta(days=7)
+
+    reservations_week = Reservation.objects.filter(
+        cafe=cafe, 
+        reservation_time__date__range=(start_of_week.date(), end_of_week.date())
+    )
+    reservations_by_day = reservations_week.extra({'day': "strftime('%%w', reservation_time)"}).values('day').annotate(count=Count('id')).order_by('day')
+    
+    # Days of the week and counts initialization
+    days_of_week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    counts = [0] * 7
+
+    # Populate counts for each day of the week
+    for res in reservations_by_day:
+        day = int(res['day'])
+        counts[day] = res['count']
+        
+#시간대별 예약
+    reservations_today = Reservation.objects.filter(cafe=cafe, reservation_time__date=today.date())
+    reservations_by_hour = reservations_today.extra({'hour': "strftime('%%H', reservation_time)"}).values('hour').annotate(count=Count('id')).order_by('hour')
+    hours = list(range(10, 23))
+    counts = [0] * len(hours)
+    
+    for res in reservations_by_hour:
+        hour = int(res['hour'])
+        counts[hour - 10] = res['count']
+
+    # Determine the hour with the most reservations
+    max_hour = None
+    if counts:
+        max_count = max(counts)
+        max_hour = hours[counts.index(max_count)]
+        
+    # 좋아요 누른 고객 수
+    favorite_count = Favorite.objects.filter(cafe=cafe, liked=True).count()
+
+    # 오늘 예약 생성 수
+    today_reservations_count = reservations_today.count()
+
+    context = {
+        'cafe': cafe,
+        'favorite_count': favorite_count,
+        'today_reservations_count': today_reservations_count,
+        'hours': hours,
+        'counts': counts,
+        'max_hour': max_hour,
+        'days_of_week': days_of_week,
+
+
+    }
+
+    return render(request, 'dashboard/overview.html', context)
