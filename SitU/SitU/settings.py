@@ -62,7 +62,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 1
+SITE_ID = 2
 
 ROOT_URLCONF = 'SitU.urls'
 
@@ -91,8 +91,12 @@ WSGI_APPLICATION = 'SitU.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'situ',
+        'USER': 'root',
+        'PASSWORD': '12340000',
+        'HOST': '3.36.127.40',
+        'PORT': '3306',
     }
 }
 

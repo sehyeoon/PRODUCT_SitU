@@ -4,7 +4,7 @@
     <h1>관심&즐겨찾기 목록</h1>
     {% if not likes %}
     <p>현재 관심&즐겨찾기한 카페가 없습니다.</p>
-    <a href="{% url 'home' %}" class="btn btn-sm btn-primary">카페 보러가기</a>
+    <div><a href="{% url 'home' %}">카페 보러가기</a></div>
     {% else %} {% for favorite in likes %}
     <div class="card mb-3">
         <div class="card-content">
