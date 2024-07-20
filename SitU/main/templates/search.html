@@ -1,33 +1,33 @@
-{% extends 'base.html' %}{% load static %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 
 <link rel="stylesheet" href="{% static 'css/search.css' %}" />
 
 <div class="screen">
     <div class="div">
         <div class="frame">
-            <form method="get" action="{% url 'search' %}" class="search-form">
-                <div class="search-icon-container">
-                    <img src="{% static 'img/search.png' %}" class="search-icon" />
+            <div class="sticky-container">
+                <form method="get" action="{% url 'search' %}" class="search-form">
+                    <div class="search-icon-container">
+                        <img src="{% static 'img/search.png' %}" class="search-icon" />
+                    </div>
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ query|default:'' }}"
+                        placeholder="카페 이름으로 검색하기"
+                        id="search-input"
+                    />
+                </form>
+                <div class="filter-buttons">
+                    <button id="filter-plug" class="btn">플러그</button>
+                    <button id="filter-backseat" class="btn">등받이</button>
                 </div>
-                <input
-                    type="text"
-                    name="q"
-                    value="{{ query|default:'' }}"
-                    placeholder="카페 이름으로 검색하기"
-                    id="search-input"
-                />
-            </form>
-            <div class="filter-buttons">
-                <button id="filter-plug" class="btn">플러그</button>
-                <button id="filter-backseat" class="btn">등받이</button>
             </div>
-            <ul id="results-list">
-                {% for cafe in cafes %}
-                <li><a href="{% url 'cafe_detail' cafe.id %}">{{ cafe.cafe_name }}</a> - {{ cafe.cafe_address }}</li>
-                {% empty %}
-                <li>검색 결과가 없습니다.</li>
-                {% endfor %}
-            </ul>
+            <div id="results-container" style="display: none">
+                <ul id="results-list">
+                    <!-- 검색 결과 카드가 여기에 추가됩니다. -->
+                </ul>
+            </div>
         </div>
     </div>
 </div>
@@ -70,21 +70,34 @@
                 },
                 dataType: 'json',
                 success: function (data) {
+                    var resultsContainer = $('#results-container');
                     var resultsList = $('#results-list');
                     resultsList.empty();
                     if (data.length > 0) {
+                        resultsContainer.show();
                         data.forEach(function (cafe) {
                             resultsList.append(
-                                '<li><a href="/cafe/' +
-                                    cafe.id +
-                                    '/">' +
-                                    cafe.cafe_name +
-                                    '</a> - ' +
-                                    cafe.cafe_address +
-                                    '</li>'
+                                '<li class="card mb-3">' +
+                                    '<div class="card-content">' +
+                                        '<div class="card-image">' +
+                                            '<img src="{% static 'img/cafe_photo_1.png' %}" class="card-img" alt="' + cafe.cafe_name + '" />' +
+                                        '</div>' +
+                                        '<div class="card-body">' +
+                                            '<h5 class="card-title">' +
+                                                '<a href="/cafe/' + cafe.id + '/">' + cafe.cafe_name + '</a>' +
+                                            '</h5>' +
+                                            '<p class="card-text">' +
+                                                cafe.cafe_time + '<br />' +
+                                                '잔여석: ' + cafe.empty_seats +
+                                            '</p>' +
+                                            '<a href="/cafe/' + cafe.id + '/seats/" class="btn btn-sm btn-primary">자리잡기</a>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</li>'
                             );
                         });
                     } else {
+                        resultsContainer.show();
                         resultsList.append('<li>검색 결과가 없습니다.</li>');
                     }
                 },

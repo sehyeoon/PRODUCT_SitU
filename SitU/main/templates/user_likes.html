@@ -1,26 +1,28 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 <link rel="stylesheet" href="{% static 'css/user_likes.css' %}" />
-<div class="container">
-    <h1>관심 목록</h1>
-
-    {% for favorite in likes %}
+<div class="container1">
+    <h1>관심&즐겨찾기 목록</h1>
+    {% if not likes %}
+    <p>현재 관심&즐겨찾기한 카페가 없습니다.</p>
+    <a href="{% url 'home' %}" class="btn btn-sm btn-primary">카페 보러가기</a>
+    {% else %} {% for favorite in likes %}
     <div class="card mb-3">
         <div class="card-content">
             <div class="card-image">
-                <img src="{%static 'img/cafe_photo_1.png' %}" class="card-img" alt="{{ cafe.cafe_name }}" />
+                <img src="{%static 'img/cafe_photo_1.png'%}" class="card-img" alt="{{ favorite.cafe.cafe_name }}" />
             </div>
             <div class="card-body">
                 <h5 class="card-title">
-                    <a href="{% url 'cafe_detail' favorite.cafe_id %}">{{ cafe.cafe_name }}</a>
+                    <a href="{% url 'cafe_detail' favorite.cafe.id %}">{{ favorite.cafe.cafe_name }}</a>
                 </h5>
                 <p class="card-text">
-                    {{ cafe.cafe_time }}<br />
-                    잔여석: {{ cafe.empty_seats }}
+                    {{ favorite.cafe.cafe_time }}<br />
+                    잔여석: {{ favorite.cafe.empty_seats }}
                 </p>
+                <a href="{% url 'seat_map' favorite.cafe.id %}" class="btn btn-sm btn-primary">자리잡기</a>
             </div>
-            <a href="{% url 'seat_map' favorite.cafe_id %}" class="btn btn-sm btn-primary">자리잡기</a>
         </div>
     </div>
-    {% endfor %}
+    {% endfor %} {% endif %}
 </div>
-{% endblock %} {% block navbar %} {{ block.super }} {% endblock %}
+{% endblock %}

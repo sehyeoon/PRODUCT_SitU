@@ -111,7 +111,7 @@ hr {
     border: #ff8244 solid 2px;
     border-radius: 10px;
     width: 100%;
-    max-width: 430px;
+    max-width: 460px;
     height: 200px;
     margin: auto;
     margin-top: 8px;
@@ -125,7 +125,9 @@ hr {
     font-size: 12px;
     letter-spacing: -0.7px;
     line-height: normal;
-    margin-left: 8px;
+    margin-left: 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .image {
@@ -183,13 +185,14 @@ h3 {
 .detail_info {
     position: relative;
     width: 100%;
-    max-width: 440px;
-    height: auto;
+    max-width: 480px;
+    height: fit-content;
     aspect-ratio: 340 / 147; /* 가로 세로 비율 유지 */
     border: #ff8244 solid 2px;
     border-radius: 10px;
     padding: 20px;
     display: flex;
+    align-items: center;
 }
 
 .detail_info p {
@@ -211,9 +214,10 @@ h3 {
     align-items: center;
     justify-content: center;
     position: fixed;
-    bottom: 20px; /* 화면 하단에서 20px 위에 위치 */
+    bottom: 90px;
     left: 50%; /* 화면의 가로 중앙에 위치 */
     transform: translateX(-50%); /* 가로 중앙 정렬 보정 */
+    align-content: center;
 }
 
 .reserve_button h1 {
@@ -223,17 +227,20 @@ h3 {
     font-weight: 900;
     color: #ffffff;
     font-size: 18px;
+    align-self: center;
 }
 
-/* 미디어 쿼리: 작은 화면용 */
-@media (max-width: 768px) {
-    body {
-        margin-top: 10%;
-        margin-left: 5%;
-    }
+body {
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+    padding-bottom: 120px; /* 버튼 높이 + 여유 공간 */
+}
 
-    .map,
-    .cafe_map {
-        width: 100%;
-    }
+h1 {
+    margin: 0px;
+}
+
+body::-webkit-scrollbar {
+    display: none;
 }

@@ -66,6 +66,9 @@ class Cafe(models.Model):
     empty_seats = models.IntegerField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
+    
+    def __str__(self):
+        return f"{self.cafe_name} - {self.cafe_id}"
 
 class Seat(models.Model):
     id = models.AutoField(primary_key=True)
@@ -78,6 +81,9 @@ class Seat(models.Model):
     seats_no = models.IntegerField(null=True, blank=True)
     seats_count = models.IntegerField(null=True, blank=True)
     empty_seats = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.cafe.cafe_name} - {self.seats_no}"
 
 class Favorite(models.Model):
     id = models.AutoField(primary_key=True)

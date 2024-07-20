@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>SitU - 카페 예약 서비스</title>
         <link
-            href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700;800&display=swap"
             rel="stylesheet"
         />
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
@@ -15,8 +15,14 @@
         <script src="{% static 'js/main.js' %}"></script>
     </head>
     <body>
-        <div class="container mt-4 screen">{% block content %} {% endblock %}</div>
-
+        <nav class="navbar navbar-top">
+            <div class="container0">
+                <a class="navbar-brand" href="{% url 'home'%}">SitU</a>
+            </div>
+        </nav>
+        <div class="content-wrapper">
+            <div class="container mt-4 screen">{% block content %} {% endblock %}</div>
+        </div>
         {% block navbar %}
         <nav class="navbar navbar-bottom navbar-light">
             <div class="container navbar-container">
