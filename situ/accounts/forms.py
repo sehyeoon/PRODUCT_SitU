@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from .models import Cafe
 
 class CafeCreationForm(forms.ModelForm):
@@ -40,10 +40,6 @@ class CafeChangeForm(forms.ModelForm):
         # This is done here, rather than on the field, because the field does not have access to the initial value
         return self.initial["cafe_password"]
 
-class CafeAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(label='Cafe ID', max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(label='Cafe Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-
-    def confirm_login_allowed(self, user):
-        if not user.is_active:
-            raise forms.ValidationError("This account is inactive.", code='inactive')
+class CafeLoginForm(forms.Form):
+    cafe_id = forms.CharField(label='Cafe ID')
+    cafe_password = forms.CharField(label='Password', widget=forms.PasswordInput)

@@ -4,10 +4,11 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'situ.settings')
 django.setup()
 
-from reservations.models import Seat
+from reservations.models import Seat, Reservation
 from accounts.models import Cafe
 
-# 기존 좌석 데이터 삭제
+# 기존 좌석 데이터 및 예약 데이터 삭제
+Reservation.objects.all().delete()
 Seat.objects.all().delete()
 
 # 특정 카페 객체 가져오기 (예: cafe_id가 'store_001'인 카페)

@@ -1,25 +1,35 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Seat
+from .models import Seat, Reservation
 from django.contrib.auth.decorators import login_required
 from datetime import timedelta
-import pytz
 
 @login_required
 def seat_overview(request):
     seats = Seat.objects.all()
-    return render(request, 'reservations/seat_overview.html', {'seats': seats, 'user': request.user})
+    seats_with_reservations = []
+    for seat in seats:
+        reservations = seat.reservations.all()
+        if reservations.exists():
+            seats_with_reservations.append({
+                'seat': seat,
+                'reservation': reservations.first()
+            })
+        else:
+            seats_with_reservations.append({
+                'seat': seat,
+                'reservation': None
+            })
+    return render(request, 'reservations/seat_overview.html', {'seats_with_reservations': seats_with_reservations, 'user': request.user})
 
 @login_required
 def update_seat_status(request, seat_id, status):
     seat = get_object_or_404(Seat, id=seat_id)
-    korea_tz = pytz.timezone('Asia/Seoul')
     if status == 'occupied':
         seat.seat_status = 'occupied'
-        seat.seat_start_time = timezone.now().astimezone(korea_tz)
+        seat.seat_start_time = timezone.now()
     elif status == 'reserved':
         seat.seat_status = 'reserved'
-        seat.reserved_by = request.user
     elif status == 'available':
         seat.seat_status = 'available'
         seat.seat_start_time = None
@@ -28,19 +38,19 @@ def update_seat_status(request, seat_id, status):
     return redirect('seat_overview')
 
 @login_required
-def confirm_reservation(request, seat_id):
-    seat = get_object_or_404(Seat, id=seat_id)
+def confirm_reservation(request, reservation_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id)
+    seat = reservation.seat
     seat.seat_status = 'reserved'
-    seat.reserved_by = request.user
     seat.save()
     return redirect('seat_overview')
 
 @login_required
-def cancel_reservation(request, seat_id):
-    seat = get_object_or_404(Seat, id=seat_id)
+def cancel_reservation(request, reservation_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id)
+    seat = reservation.seat
     seat.seat_status = 'available'
-    seat.reserved_by = None
-    seat.seat_start_time = None
+    reservation.delete()
     seat.save()
     return redirect('seat_overview')
 
@@ -53,14 +63,10 @@ def seat_check(request, seat_id):
     seat.save()
     return redirect('seat_overview')
 
-# 좌석 데이터가 있는지 확인하는 디버깅
 @login_required
-def seat_overview(request):
-    seats = Seat.objects.all()
-    if not seats:
-        print("No seats found.")
-    else:
-        for seat in seats:
-            print(f"Seat {seat.seats_no}: Status - {seat.get_seat_status_display()}")
-    return render(request, 'reservations/seat_overview.html', {'seats': seats, 'user': request.user})
-
+def create_reservation(request, seat_id):
+    seat = get_object_or_404(Seat, id=seat_id)
+    reservation = Reservation.objects.create(seat=seat, cafe=request.user, user_id=request.user.id)
+    seat.seat_status = 'requesting'
+    seat.save()
+    return redirect('seat_overview')

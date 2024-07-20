@@ -96,7 +96,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'situ',
         'USER': 'sehyeon',
-        'PASSWORD': 'rlatpgus',
+        'PASSWORD': 'tpgus1122',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -139,6 +139,10 @@ USE_I18N = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
