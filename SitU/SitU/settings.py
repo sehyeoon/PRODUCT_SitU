@@ -138,8 +138,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'main/static')]
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'main/static',
+    BASE_DIR / 'dashboard/static',
+    BASE_DIR / 'reservations/static',
+]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -159,3 +165,8 @@ ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'user_id'
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
