@@ -4,24 +4,23 @@ from .models import Cafe
 from .forms import CafeCreationForm, CafeChangeForm
 
 class CafeAdmin(UserAdmin):
-    form = CafeChangeForm
     add_form = CafeCreationForm
-
-    list_display = ('cafe_id', 'name', 'telephone', 'is_admin')
-    list_filter = ('is_admin',)
+    form = CafeChangeForm
+    model = Cafe
+    list_display = ('cafe_id', 'cafe_name', 'telephone', 'is_superuser')
+    list_filter = ('is_superuser',)
     fieldsets = (
         (None, {'fields': ('cafe_id', 'password')}),
-        ('Personal info', {'fields': ('name', 'telephone')}),
-        ('Permissions', {'fields': ('is_admin', 'is_active')}),
+        ('Personal info', {'fields': ('cafe_name', 'telephone')}),
+        ('Permissions', {'fields': ('is_superuser',)}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('cafe_id', 'name', 'telephone', 'password1', 'password2', 'is_admin', 'is_active'),
-        }),
+            'fields': ('cafe_id', 'cafe_name', 'telephone', 'password1', 'password2', 'is_superuser')}
+        ),
     )
-    search_fields = ('cafe_id', 'name')
+    search_fields = ('cafe_id',)
     ordering = ('cafe_id',)
-    filter_horizontal = ()
 
 admin.site.register(Cafe, CafeAdmin)
