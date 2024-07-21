@@ -20,8 +20,8 @@ urlpatterns = [
     path('all_cafes/', views.all_cafes, name='all_cafes'),
     path('cafe/<int:cafe_id>/seats/', views.seat_map, name='seat_map'),
     path('reservation/create/<int:cafe_id>/<int:seat_id>/', views.reservation_create, name='reservation_create'),
-    path('reservation/success/', views.reservation_success, name='reservation_success'),  # Add this line
-    path('cafe/<int:cafe_id>/seat_overview', views.seat_overview, name='seat_overview'),  # Add this line
+    path('reservation/success/', views.reservation_success, name='reservation_success'),
+    path('cafe/<int:cafe_id>/seat_overview', views.seat_overview, name='seat_overview'),
     path('update_seat_status/<int:seat_id>/', views.update_seat_status, name='update_seat_status'),
     path('confirm_reservation/<int:reservation_id>/<int:seat_id>/', views.confirm_reservation, name='confirm_reservation'),
     path('cancel_reservation/<int:seat_id>/', views.cancel_reservation, name='cancel_reservation'),
@@ -29,4 +29,5 @@ urlpatterns = [
     path('login/cafe/', views.cafe_login, name='cafe_login'),
     path('check_active_reservation/', views.check_active_reservation, name='check_active_reservation'),
     path('cafe/<int:cafe_id>/dashboard', views.dashboard_overview, name='dashboard_overview'),
+    path('situ_ceo/', include('situ_ceo.urls')),  # situ_ceo 앱의 URL 패턴 포함
 ]

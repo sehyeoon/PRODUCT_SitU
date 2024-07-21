@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
 from django.contrib.auth.hashers import make_password, check_password
+from accounts.models import Cafe
 
 class UserManager(BaseUserManager):
     def create_user(self, user_id, name, password=None, telephone=None, is_guest=False):
@@ -50,29 +51,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
-class Cafe(models.Model):
-    id = models.AutoField(primary_key=True)
-    cafe_id = models.CharField(max_length=50, unique=True)
-    cafe_pw = models.CharField(max_length=100)
-    cafe_name = models.CharField(max_length=100)
-    ceo_name = models.CharField(max_length=100, null=True, blank=True)
-    cafe_time = models.CharField(max_length=100, null=True, blank=True)
-    ceo_tel = models.CharField(max_length=20, null=True, blank=True)
-    cafe_region = models.CharField(max_length=100, null=True, blank=True)
-    cafe_tel = models.CharField(max_length=20, null=True, blank=True)
-    cafe_address = models.CharField(max_length=255, null=True, blank=True)
-    cafe_photo = models.ImageField(upload_to='cafe_photos/', null=True, blank=True)
-    seats_count = models.IntegerField(null=True, blank=True)
-    empty_seats = models.IntegerField(null=True, blank=True)
-    latitude = models.FloatField(null=True, blank=True)
-    longitude = models.FloatField(null=True, blank=True)
-    
-    def __str__(self):
-        return f"{self.cafe_name} - {self.cafe_id}"
-
-    @property
-    def empty_seats(self):
-        return self.seat_set.filter(seat_status='available').count()
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='user_set',
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups'
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='user_permissions_set',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions'
+    )
 
 class Seat(models.Model):
     id = models.AutoField(primary_key=True)
@@ -84,7 +76,6 @@ class Seat(models.Model):
     seat_use_time = models.DateTimeField(null=True, blank=True)
     seats_no = models.IntegerField(null=True, blank=True)
     seats_count = models.IntegerField(null=True, blank=True)
-    empty_seats = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.cafe.cafe_name} - {self.seats_no}"
@@ -98,7 +89,7 @@ class Favorite(models.Model):
 class Reservation(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, to_field='id', on_delete=models.CASCADE, related_name='reservations')
-    cafe = models.ForeignKey(Cafe, to_field='id', on_delete=models.CASCADE, related_name='reservations')
+    cafe = models.ForeignKey(Cafe, to_field='id', on_delete=models.CASCADE, related_name='cafe_reservations')
     seat = models.ForeignKey(Seat, to_field='id', on_delete=models.CASCADE, related_name='reservations')
     reservation_time = models.DateTimeField(default=timezone.now)
     number_of_people = models.IntegerField(default=1)
