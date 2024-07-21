@@ -23,7 +23,7 @@ class UserManager(BaseUserManager):
     def get_by_natural_key(self, user_id):
         return self.get(user_id=user_id)
 
-class User(AbstractBaseUser, PermissionsMixin):  # PermissionsMixin을 추가하여 상속합니다.
+class User(AbstractBaseUser, PermissionsMixin): 
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     telephone = models.CharField(max_length=20, null=True, blank=True)
@@ -70,10 +70,14 @@ class Cafe(models.Model):
     def __str__(self):
         return f"{self.cafe_name} - {self.cafe_id}"
 
+    @property
+    def empty_seats(self):
+        return self.seat_set.filter(seat_status='available').count()
+
 class Seat(models.Model):
     id = models.AutoField(primary_key=True)
     cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE)
-    seat_status = models.CharField(max_length=20, choices=[('available', 'Available'), ('occupied', 'Occupied'), ('requesting', 'Requesting'), ('reserved', 'Reserved')])
+    seat_status = models.CharField(max_length=20, choices=[('available', '사용 가능'), ('occupied', '사용중'), ('requesting', '예약 진행중'), ('reserved', '예약 완료')])
     plug = models.BooleanField(null=True, blank=True)
     backseat = models.BooleanField(null=True, blank=True)
     seat_start_time = models.DateTimeField(null=True, blank=True)
@@ -97,7 +101,7 @@ class Reservation(models.Model):
     cafe = models.ForeignKey(Cafe, to_field='id', on_delete=models.CASCADE, related_name='reservations')
     seat = models.ForeignKey(Seat, to_field='id', on_delete=models.CASCADE, related_name='reservations')
     reservation_time = models.DateTimeField(default=timezone.now)
-    number_of_people = models.IntegerField(default=1)  # 기본값 설정
+    number_of_people = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.user.name} - {self.cafe.cafe_name} - {self.seat.seats_no}"

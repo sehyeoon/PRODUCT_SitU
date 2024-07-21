@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var selectedSeatId = this.id;
             var currentStatus = this.getAttribute('data-status');
             var newStatus;
+            var cafeId = document.getElementById('cafe-id').value;
 
             if (currentStatus === 'available') {
                 newStatus = 'reserved';
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             console.log(`Requesting status update for seat ID: ${selectedSeatId} to status: ${newStatus}`);
 
-            fetch(`/update_seat_status/${selectedSeatId}/`, {
+            fetch(`/cafe/${cafeId}/update_seat_status/${selectedSeatId}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
 function updateSeatVisual(seatElement, status) {
     seatElement.setAttribute('data-status', status);
 
@@ -174,8 +176,7 @@ function closePopup() {
 // 팝업 닫기 버튼 설정
 var popupCloseButton = document.getElementById('popup-close');
 popupCloseButton.addEventListener('click', closePopup);
-var popupCloseButton = document.getElementById('popup-close');
-popupCloseButton.addEventListener('click', closePopup);
+
 function showFloor(floor) {
     console.log('Showing floor: ', floor);
     document.getElementById('floor1').style.display = 'none';

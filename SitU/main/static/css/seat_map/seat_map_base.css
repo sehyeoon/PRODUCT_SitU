@@ -16,6 +16,7 @@ body {
 .cafe_info {
     background-color: #ffffff;
     width: 250px;
+    margin-left: 10px;
 }
 
 .cafe_time {
@@ -26,7 +27,6 @@ body {
     letter-spacing: -1.05px;
     line-height: normal;
     margin: 0;
-    margin-left: 5px;
 }
 
 .cafe_name {
@@ -34,7 +34,7 @@ body {
     font-family: 'Pretendard-ExtraBold';
     font-weight: 800;
     color: #ff8244;
-    font-size: 48px;
+    font-size: 40px;
     letter-spacing: -3.84px;
     top: 22px;
     left: 9px;

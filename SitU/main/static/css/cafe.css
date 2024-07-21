@@ -193,6 +193,7 @@ h3 {
     padding: 20px;
     display: flex;
     align-items: center;
+    margin-bottom: 150px;
 }
 
 .detail_info p {
@@ -233,8 +234,6 @@ h3 {
 body {
     overflow-y: auto;
     height: auto;
-    min-height: 100vh;
-    padding-bottom: 120px; /* 버튼 높이 + 여유 공간 */
 }
 
 h1 {

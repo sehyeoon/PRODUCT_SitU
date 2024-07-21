@@ -7,15 +7,16 @@ body {
     font-family: 'Pretendard', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: white;
     color: var(--secondary-color);
     letter-spacing: -0.05rem;
+    height: 100%;
 }
 
 .screen {
     display: flex;
     justify-content: center;
     padding: 20px;
+    height: 100%;
 }
 
 .content-container {

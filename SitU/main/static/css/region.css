@@ -1,7 +1,4 @@
 /* region.css */
-body {
-    background-color: white;
-}
 
 h1 {
     font-size: 32px;
@@ -101,4 +98,10 @@ h1 {
 
 div.container.mt-4.screen {
     padding: 0px;
+    margin-bottom: 75px;
+}
+
+.screen {
+    display: flex;
+    justify-content: center;
 }

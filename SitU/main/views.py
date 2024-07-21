@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout
+from django.contrib.auth import get_user,authenticate, login
 from django.contrib.auth.decorators import login_required
 from .models import User, Cafe, Seat, Favorite, Reservation
 from django.db.models import Q
@@ -9,6 +10,12 @@ from geopy.distance import distance
 from django.utils import timezone
 from django.contrib.auth.hashers import check_password
 import json
+from datetime import timedelta
+from django.db.models import Count
+from django.core.serializers.json import DjangoJSONEncoder
+import pytz
+from django.urls import reverse
+
 
 def home(request):
     areas = ['정후', '참살이', '정문', '제기동', '개운사길', '옆살이', '이공계']
@@ -200,10 +207,13 @@ def user_profile(request, user_id):
         seat__seat_status='available'
     ).order_by('-reservation_time')
     
+    has_active_reservation = current_reservations.exists()
+    
     context = {
         'user': user,
         'current_reservations': current_reservations,
         'past_reservations': past_reservations,
+        'has_active_reservation': has_active_reservation,
     }
     return render(request, 'user_profile.html', context)
 
@@ -288,6 +298,15 @@ def reservation_create(request, cafe_id, seat_id):
     cafe = get_object_or_404(Cafe, id=cafe_id)
     seats = Seat.objects.filter(cafe_id=cafe_id)
 
+    has_active_reservation = Reservation.objects.filter(
+        user=user,
+        seat__seat_status__in=['requesting', 'reserved', 'occupied']
+    ).exists()
+    
+    if has_active_reservation:
+        messages.error(request, '이미 예약/사용 중인 좌석이 있습니다.')
+        return redirect('user_profile', user_id=user.id)
+    
     if request.method == 'POST':
         seat = get_object_or_404(Seat, id=seat_id)
         
@@ -304,6 +323,8 @@ def reservation_create(request, cafe_id, seat_id):
         seat.seat_status = 'requesting'
         seat.save()
 
+        messages.success(request, f'{cafe.cafe_name}의 좌석 {seat.seats_no}번 예약이 완료되었습니다.')
+        
         return redirect('reservation_success')
 
     return render(request, template_name, {'cafe': cafe, 'seats': seats})
@@ -333,18 +354,20 @@ def cafe_login(request):
             if cafe.cafe_pw == cafe_pw:
                 # 로그인 성공 처리
                 request.session['cafe_id'] = cafe.id
-                return redirect('cafe_dashboard')  # 로그인 후 리다이렉트할 페이지
+                return redirect('dashboard_overview', cafe_id=cafe.id)  # 로그인 후 리다이렉트할 페이지
             else:
                 messages.error(request, '비밀번호가 올바르지 않습니다.')
         except Cafe.DoesNotExist:
             messages.error(request, '존재하지 않는 카페 ID입니다.')
     return render(request, 'cafe_login.html')
 
+
 @login_required
 def seat_overview(request, cafe_id):
-    seats = Seat.objects.all()
+    seats = Seat.objects.filter(cafe_id=cafe_id)
     cafe = get_object_or_404(Cafe, id=cafe_id)
-    return render(request, 'reservations/seat_overview.html', {'cafe': cafe,'seats': seats, 'user': request.user})
+    reservations = Reservation.objects.filter(seat__cafe_id=cafe_id)
+    return render(request, 'reservations/seat_overview.html', {'cafe': cafe, 'seats': seats, 'reservations': reservations, 'user': request.user})
 
 @login_required
 def update_seat_status(request, seat_id):
@@ -354,16 +377,19 @@ def update_seat_status(request, seat_id):
             data = json.loads(request.body)
             status = data.get('status')
 
-            if status not in ['requesting', 'reserved', 'occupied', 'available']:
+            if status == 'occupied':
+                seat.seat_status = 'occupied'
+                seat.seat_start_time = timezone.now()
+            elif status == 'reserved':
+                seat.seat_status = 'reserved'
+                seat.reserved_by = request.user
+            elif status == 'available':
+                seat.seat_status = 'available'
+                seat.seat_start_time = None
+                seat.reserved_by = None
+            else:
                 return JsonResponse({'success': False, 'error': 'Invalid status'}, status=400)
 
-            seat.seat_status = status
-            if status == 'occupied':
-                seat.seat_start_time = timezone.now()
-            elif status == 'available':
-                seat.seat_start_time = None
-                # 완료된 예약으로 간주합니다.
-                Reservation.objects.filter(seat=seat, seat__seat_status='occupied').update(seat__seat_status='available')
             seat.save()
             return JsonResponse({'success': True})
         except Exception as e:
@@ -372,21 +398,25 @@ def update_seat_status(request, seat_id):
 
 
 @login_required
-def confirm_reservation(request, seat_id):
-    seat = get_object_or_404(Seat, id=seat_id)
+def confirm_reservation(request, reservation_id, seat_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id, seat__id=seat_id)
+    seat = reservation.seat
+    seat_id = reservation.seat.id
     seat.seat_status = 'reserved'
-    seat.reserved_by = request.user
     seat.save()
-    return redirect('seat_overview')
+    
+    return redirect('seat_overview', cafe_id=seat.cafe.id)
 
 @login_required
-def cancel_reservation(request, seat_id):
-    seat = get_object_or_404(Seat, id=seat_id)
+def cancel_reservation(request, reservation_id, cafe_id, *args, **kwargs):
+    reservation = get_object_or_404(Reservation, id=reservation_id)
+    seat = reservation.seat
+    seat_id = reservation.seat.id
     seat.seat_status = 'available'
-    seat.reserved_by = None
-    seat.seat_start_time = None
+    reservation.delete()
     seat.save()
-    return redirect('seat_overview')
+    
+    return redirect(reverse('seat_overview', kwargs={'cafe_id': cafe_id}))
 
 @login_required
 def seat_check(request, seat_id):
@@ -396,3 +426,70 @@ def seat_check(request, seat_id):
         seat.seat_start_time = timezone.now()
     seat.save()
     return redirect('seat_overview')
+
+@login_required
+def check_active_reservation(request):
+    has_active_reservation = Reservation.objects.filter(
+        user=request.user,
+        seat__seat_status__in=['requesting', 'reserved', 'occupied']
+    ).exists()
+    return JsonResponse({'has_active_reservation': has_active_reservation})
+
+@login_required
+def dashboard_overview(request, cafe_id):
+    cafe = get_object_or_404(Cafe, id=cafe_id)
+    seoul_tz = pytz.timezone('Asia/Seoul')
+    today = timezone.now().astimezone(seoul_tz)
+    
+    start_of_week = today - timezone.timedelta(days=today.weekday())
+    end_of_week = start_of_week + timezone.timedelta(days=7)
+
+    reservations_week = Reservation.objects.filter(
+        cafe=cafe, 
+        reservation_time__date__range=(start_of_week.date(), end_of_week.date())
+    )
+    reservations_by_day = reservations_week.extra({'day': "DAYOFWEEK(reservation_time)"}).values('day').annotate(count=Count('id')).order_by('day')
+    
+    # 요일과 예약 수 초기화
+    days_of_week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    counts = [0] * 7
+
+    # 각 요일에 대한 예약 수 채우기
+    for res in reservations_by_day:
+        day = int(res['day']) - 1  # MySQL의 DAYOFWEEK는 1(일요일)부터 7(토요일)까지 반환합니다.
+        counts[day] = res['count']
+        
+    # 시간대별 예약
+    reservations_today = Reservation.objects.filter(cafe=cafe, reservation_time__date=today.date())
+    reservations_by_hour = reservations_today.extra({'hour': "HOUR(reservation_time)"}).values('hour').annotate(count=Count('id')).order_by('hour')
+    hours = list(range(10, 23))
+    counts_by_hour = [0] * len(hours)
+    
+    for res in reservations_by_hour:
+        hour = int(res['hour'])
+        counts_by_hour[hour - 10] = res['count']
+
+    # 가장 많은 예약이 있는 시간 결정
+    max_hour = None
+    if counts_by_hour:
+        max_count = max(counts_by_hour)
+        max_hour = hours[counts_by_hour.index(max_count)]
+        
+    # 좋아요 누른 고객 수
+    favorite_count = Favorite.objects.filter(cafe=cafe, liked=True).count()
+
+    # 오늘 예약 생성 수
+    today_reservations_count = reservations_today.count()
+
+    context = {
+        'cafe': cafe,
+        'favorite_count': favorite_count,
+        'today_reservations_count': today_reservations_count,
+        'hours': hours,
+        'counts_by_hour': counts_by_hour,
+        'max_hour': max_hour,
+        'days_of_week': days_of_week,
+        'counts': counts,
+    }
+
+    return render(request, 'dashboard/overview.html', context)

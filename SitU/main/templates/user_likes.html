@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 <link rel="stylesheet" href="{% static 'css/user_likes.css' %}" />
 <div class="container1">
-    <h1>관심&즐겨찾기 목록</h1>
+    <h1 class="mt-4">관심&즐겨찾기 목록</h1>
     {% if not likes %}
     <p>현재 관심&즐겨찾기한 카페가 없습니다.</p>
     <div><a href="{% url 'home' %}">카페 보러가기</a></div>
@@ -19,10 +19,18 @@
                     {{ favorite.cafe.cafe_time }}<br />
                     잔여석: {{ favorite.cafe.empty_seats }}
                 </p>
-                <a href="{% url 'seat_map' favorite.cafe.id %}" class="btn btn-sm btn-primary">자리잡기</a>
+                <a
+                    href="#"
+                    class="btn btn-sm btn-primary reserve-button"
+                    data-cafe-id="{{ favorite.cafe.id }}"
+                    data-user-profile-url="{% url 'user_profile' user.id %}"
+                    >자리잡기</a
+                >
             </div>
         </div>
     </div>
     {% endfor %} {% endif %}
 </div>
+
+<script src="{% static 'js/cafe_detail.js' %}"></script>
 {% endblock %}
