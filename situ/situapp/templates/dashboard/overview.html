@@ -10,6 +10,13 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
+        <!--페이지 이동 버튼-->
+        <div class="pagebutton">
+            <button class="btn" onclick="location.href='{% url 'seat_overview' cafe.id %}'">
+                좌석관리 페이지로 이동
+            </button>
+        </div>
+
         <div class="dashboard">
             <div class="title">
                 <div class="cafe_info">

@@ -10,6 +10,13 @@
         <link rel="stylesheet" href="{% static 'css/seat_map/seat_map_1_2.css' %}" />
     </head>
     <body>
+        <!--페이지 이동 버튼-->
+        <div class="pagebutton">
+            <button class="btn" onclick="location.href='{% url 'dashboard_overview' cafe.id %}'">
+                가게현황 페이지로 이동
+            </button>
+        </div>
+
         <div class="title">
             <div class="cafe_info">
                 <p class="cafe_time">안녕하세요 사장님!</p>
