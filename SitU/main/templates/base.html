@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+{% load socialaccount %}
+<html lang="ko">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SitU - 카페 예약 서비스</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+        <script src="{% static 'js/main.js' %}"></script>
+    </head>
+    <body>
+        <div class="page-container">
+            <nav class="navbar navbar-top">
+                <div class="container0">
+                    <a class="navbar-brand" href="{% url 'home'%}">SitU</a>
+                </div>
+            </nav>
+            <div class="content-wrapper">
+                <div class="container mt-4 screen">{% block content %} {% endblock %}</div>
+            </div>
+            {% block navbar %}
+            <nav class="navbar navbar-bottom navbar-light">
+                <div class="container navbar-container">
+                    <div class="row w-100">
+                        <div class="nav-item col text-center">
+                            <a class="nav-link" href="{% url 'home' %}"
+                                ><div><img src="{% static 'img/home.png' %}" class="home-icon" /></div>
+                                홈</a
+                            >
+                        </div>
+                        <div class="nav-item col text-center">
+                            <a class="nav-link" href="{% url 'search' %}"
+                                ><div><img src="{% static 'img/Search_white.png' %}" class="search_white-icon" /></div>
+                                검색</a
+                            >
+                        </div>
+                        <div class="nav-item col text-center">
+                            {% if user.is_authenticated %}
+                            <a class="nav-link" href="{% url 'user_likes' user.id %}"
+                                ><div><img src="{% static 'img/Heart_white.png' %}" class="heart-icon" /></div>
+                                관심&즐겨찾기</a
+                            >
+                            {% else %}
+                            <a
+                                class="nav-link"
+                                href="javascript:void(0);"
+                                onclick="showLoginAlert('{% url 'account_login' %}')"
+                                ><div><img src="{% static 'img/Heart_white.png' %}" class="heart-icon" /></div>
+                                관심&즐겨찾기</a
+                            >
+                            {% endif %}
+                        </div>
+                        <div class="nav-item col text-center">
+                            {% if user.is_authenticated %}
+                            <a class="nav-link" href="{% url 'user_profile' user.id %}"
+                                ><div><img src="{% static 'img/User.png' %}" class="user-icon" /></div>
+                                마이</a
+                            >
+                            {% else %}
+                            <a class="nav-link" href="{% url 'account_login' %}"
+                                ><div><img src="{% static 'img/User.png' %}" class="user-icon" /></div>
+                                마이</a
+                            >
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            {% endblock %}
+        </div>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </body>
+</html>

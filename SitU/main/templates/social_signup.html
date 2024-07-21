@@ -1,0 +1,60 @@
+<!-- social_signup.html -->
+
+{% extends 'base.html' %} {% load static %} {% block navbar %} {% endblock %} {% block content %}
+
+<link rel="stylesheet" href="{% static 'css/user_signup.css' %}" />
+<div class="screen">
+    <div class="signup-container">
+        <h1 class="title">SitU에 오신 걸 환영합니다</h1>
+        <h2 class="subtitle">회원가입</h2>
+        <div class="separator"></div>
+        <form method="post" action="{% url 'social_signup' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="name">이름</label>
+                <input id="name" name="name" placeholder="이름을 입력하세요" required />
+            </div>
+            <div class="input-group">
+                <label for="phone">전화번호</label>
+                <input id="phone" name="phone" placeholder="전화번호를 입력하세요" required />
+            </div>
+            <div class="separator"></div>
+
+            <!-- 개인정보 수집 및 이용 동의 추가 -->
+            <div class="privacy-consent">
+                <h3 class="privacy-title">개인정보 수집 및 이용 동의</h3>
+                <div class="privacy-content">
+                    <p>본 서비스는 이용자의 카페 빈좌석 확인 및 예약을 위해 다음과 같은 개인정보를 수집합니다.</p>
+                    <ul>
+                        <li>필수 항목: 이름, 전화번호</li>
+                    </ul>
+                    <p>수집한 개인정보는 다음의 목적을 위해 사용됩니다.</p>
+                    <ul>
+                        <li>서비스 이용을 위한 본인 확인</li>
+                        <li>예약 정보 확인 및 알림</li>
+                        <li>고객 문의 응대</li>
+                    </ul>
+                    <p>개인정보 보유 및 이용 기간 : 회원 탈퇴 시까지</p>
+                    <p>
+                        이용자는 개인정보 수집 및 이용 동의를 거부할 권리가 있습니다. 다만, 동의를 거부할 경우 서비스
+                        이용에 제한이 있을 수 있습니다.
+                    </p>
+                </div>
+                <div class="consent-buttons">
+                    <label>
+                        <input type="radio" name="agree" value="yes" required />
+                        동의함
+                    </label>
+                    <label>
+                        <input type="radio" name="agree" value="no" />
+                        동의하지 않음
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="signup-button">회원가입하기</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+<!-- allauth/templates/account/logout.html -->
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="logout-message">
+    <h2>로그아웃 되었습니다.</h2>
+    <p>홈으로 이동하려면 <a href="{% url 'home' %}">여기</a>를 클릭하세요.</p>
+</div>
+{% endblock %}

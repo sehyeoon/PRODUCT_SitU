@@ -1,0 +1,111 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<link rel="stylesheet" href="{% static 'css/search.css' %}" />
+
+<div class="screen">
+    <div class="div">
+        <div class="frame">
+            <div class="sticky-container">
+                <form method="get" action="{% url 'search' %}" class="search-form">
+                    <div class="search-icon-container">
+                        <img src="{% static 'img/search.png' %}" class="search-icon" />
+                    </div>
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ query|default:'' }}"
+                        placeholder="카페 이름으로 검색하기"
+                        id="search-input"
+                    />
+                </form>
+                <div class="filter-buttons">
+                    <div class="filter">좌석필터</div>
+                    <div class="filter">|</div>
+                    <button id="filter-plug" class="btn">플러그</button>
+                    <button id="filter-backseat" class="btn">등받이</button>
+                </div>
+            </div>
+            <div id="results-container" style="display: none">
+                <ul id="results-list">
+                    <!-- 검색 결과 카드가 여기에 추가됩니다. -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var filterPlug = false;
+        var filterBackseat = false;
+
+        $('#search-input').on('input', function () {
+            searchCafes();
+        });
+
+        $('#filter-plug').on('click', function (e) {
+            e.preventDefault();
+            filterPlug = !filterPlug;
+            $(this).toggleClass('active');
+            searchCafes();
+        });
+
+        $('#filter-backseat').on('click', function (e) {
+            e.preventDefault();
+            filterBackseat = !filterBackseat;
+            $(this).toggleClass('active');
+            searchCafes();
+        });
+
+        function searchCafes() {
+            var query = $('#search-input').val();
+            var filtersApplied = filterPlug || filterBackseat;
+
+            $.ajax({
+                url: "{% url 'ajax_search' %}",
+                data: {
+                    q: query,
+                    plug: filterPlug,
+                    backseat: filterBackseat,
+                    filtersApplied: filtersApplied,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var resultsContainer = $('#results-container');
+                    var resultsList = $('#results-list');
+                    resultsList.empty();
+                    if (data.length > 0) {
+                        resultsContainer.show();
+                        data.forEach(function (cafe) {
+                            resultsList.append(
+                                '<li class="card mb-3">' +
+                                    '<div class="card-content">' +
+                                        '<div class="card-image">' +
+                                            '<img src="{% static 'img/cafe_photo_1.png' %}" class="card-img" alt="' + cafe.cafe_name + '" />' +
+                                        '</div>' +
+                                        '<div class="card-body">' +
+                                            '<h5 class="card-title">' +
+                                                '<a href="/cafe/' + cafe.id + '/">' + cafe.cafe_name + '</a>' +
+                                            '</h5>' +
+                                            '<p class="card-text">' +
+                                                cafe.cafe_time + '<br />' +
+                                                '잔여석: ' + cafe.empty_seats +
+                                            '</p>' +
+                                            '<a href="/cafe/' + cafe.id + '/seats/" class="btn btn-sm btn-primary">자리잡기</a>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</li>'
+                            );
+                        });
+                    } else {
+                        resultsContainer.show();
+                        resultsList.append('<li>검색 결과가 없습니다.</li>');
+                    }
+                },
+            });
+        }
+    });
+</script>
+
+{% endblock %}

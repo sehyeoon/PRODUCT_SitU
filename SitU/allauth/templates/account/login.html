@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% load static %} {% load i18n %} {% load account socialaccount %} {% block navbar %}
+{%endblock %} {% block content %}
+
+<link rel="stylesheet" href="{% static 'css/user_login.css' %}" />
+
+<div class="screen">
+    <div class="div">
+        <div class="overlap">
+            <div class="text-wrapper">SitU</div>
+            <div class="text-wrapper-2">당신을 위해 남겨둔 자리</div>
+        </div>
+        {% if form.errors %}
+        <div class="error-messages">
+            {% for field in form %} {% for error in field.errors %}
+            <p class="error">{{ error }}</p>
+            {% endfor %} {% endfor %} {% for error in form.non_field_errors %}
+            <p class="error">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <form method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            <div class="rectangle">
+                <input type="text" name="user_id" placeholder="아이디" required />
+            </div>
+            <div class="rectangle-2">
+                <input type="password" name="password" placeholder="비밀번호" required />
+            </div>
+            <button type="submit" class="group">
+                <div class="overlap-group">
+                    <div class="text-wrapper-3">로그인하기</div>
+                </div>
+            </button>
+        </form>
+
+        <a href="{% url 'account_signup' %}" class="overlap-wrapper">
+            <div class="overlap-group">
+                <div class="text-wrapper-4">회원가입하기</div>
+            </div>
+        </a>
+
+        <!-- 소셜 로그인 버튼 추가 -->
+        <div class="social-login-buttons">
+            <form method="POST" action="{% provider_login_url 'kakao' %}">
+                {% csrf_token %}
+                <button class="primaryAction" type="submit">
+                    <div><img src="{% static 'img/kakao_login_large_narrow.png' %}" class="kakao-login" /></div>
+                </button>
+            </form>
+            <form method="POST" action="{% provider_login_url 'naver' %}">
+                {% csrf_token %}
+                <button class="primaryAction" type="submit">
+                    <div><img src="{% static 'img/btnG_완성형.png' %}" class="naver-login" /></div>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

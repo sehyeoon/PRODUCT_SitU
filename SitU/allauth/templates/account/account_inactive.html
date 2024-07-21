@@ -1,0 +1,7 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="inactive-message">
+    <h2>계정 비활성화</h2>
+    <p>해당 계정은 현재 비활성화 상태입니다. 자세한 사항은 관리자에게 문의하세요.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary">홈으로 이동</a>
+</div>
+{% endblock %}

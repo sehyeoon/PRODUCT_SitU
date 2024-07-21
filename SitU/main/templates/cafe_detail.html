@@ -1,0 +1,91 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/cafe.css' %}" />
+<div class="title">
+    <div class="cafe_info">
+        <p class="cafe_time">{{ cafe.cafe_time }}</p>
+        <h1 class="cafe_name">{{ cafe.cafe_name }}</h1>
+    </div>
+    <div class="empty_seat">
+        <p>잔여석: {{ cafe.empty_seats }}</p>
+    </div>
+    <div class="like_button" data-cafe-id="{{ cafe.id }}">
+        <img id="like-icon" src="{% static 'img/Heart.png' %}" alt="Like" />
+    </div>
+</div>
+<div class="location">
+    <h3>위치</h3>
+    <div class="map">
+        <div class="cafe_map">지도 기반</div>
+        <p>상세주소 | {{ cafe.cafe_address }}</p>
+    </div>
+</div>
+<div class="image">
+    <h3>내부 사진</h3>
+    <div class="detail_image">
+        <img class="cafe_photo" src="{% static 'img/cafe_photo_1.png' %}" alt="Cafe Photo 1" />
+        <img class="cafe_photo" src="{% static 'img/cafe_photo_2.png' %}" alt="Cafe Photo 2" />
+        <img class="cafe_photo" src="{% static 'img/cafe_photo_3.png' %}" alt="Cafe Photo 3" />
+    </div>
+</div>
+<div class="info">
+    <h3>상세 정보</h3>
+    <div class="detail_info">
+        <div>
+            <p>운영시간</p>
+            <p>휴무일</p>
+            <p>전화번호</p>
+            <p>스터디룸 예약</p>
+        </div>
+        <div style="margin-left: 10px">
+            <p>{{ cafe.cafe_time }}</p>
+            <p>x</p>
+            <p>{{ cafe.cafe_tel }}</p>
+            <p>ㅇ</p>
+        </div>
+    </div>
+</div>
+<div class="reserve_button" data-cafe-id="{{ cafe.id }}">
+    <h1>자리잡기</h1>
+</div>
+
+<script src="{% static 'js/cafe_detail.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var likeButton = document.querySelector('.like_button');
+        var likeIcon = document.getElementById('like-icon');
+
+        // 초기 상태 설정
+        if ({{ is_liked|yesno:"true,false" }}) {
+            likeIcon.src = "{% static 'img/HeartFilled.png' %}";
+        }
+
+        likeButton.addEventListener('click', function() {
+            var cafeId = likeButton.getAttribute('data-cafe-id');
+
+            {% if user.is_authenticated %}
+                fetch(`/cafe/${cafeId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.liked) {
+                        likeIcon.src = "{% static 'img/HeartFilled.png' %}";
+                        alert('관심&즐겨찾기 설정되었습니다.');
+                    } else {
+                        likeIcon.src = "{% static 'img/Heart.png' %}";
+                        alert('관심&즐겨찾기 해제되었습니다.');
+                    }
+                });
+            {% else %}
+                alert('관심&즐겨찾기 기능은 로그인 후에 사용 가능합니다.');
+                window.location.href = "{% url 'account_login' %}";
+            {% endif %}
+        });
+    });
+</script>
+{% endblock %} {% block navbar %} {{ block.super }} {% endblock %}

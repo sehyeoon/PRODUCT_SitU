@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/user_likes.css' %}" />
+<div class="container1">
+    <h1 class="mt-4">관심&즐겨찾기 목록</h1>
+    {% if not likes %}
+    <p>현재 관심&즐겨찾기한 카페가 없습니다.</p>
+    <div><a href="{% url 'home' %}">카페 보러가기</a></div>
+    {% else %} {% for favorite in likes %}
+    <div class="card mb-3">
+        <div class="card-content">
+            <div class="card-image">
+                <img src="{%static 'img/cafe_photo_1.png'%}" class="card-img" alt="{{ favorite.cafe.cafe_name }}" />
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{% url 'cafe_detail' favorite.cafe.id %}">{{ favorite.cafe.cafe_name }}</a>
+                </h5>
+                <p class="card-text">
+                    {{ favorite.cafe.cafe_time }}<br />
+                    잔여석: {{ favorite.cafe.empty_seats }}
+                </p>
+                <a
+                    href="#"
+                    class="btn btn-sm btn-primary reserve-button"
+                    data-cafe-id="{{ favorite.cafe.id }}"
+                    data-user-profile-url="{% url 'user_profile' user.id %}"
+                    >자리잡기</a
+                >
+            </div>
+        </div>
+    </div>
+    {% endfor %} {% endif %}
+</div>
+
+<script src="{% static 'js/cafe_detail.js' %}"></script>
+{% endblock %}

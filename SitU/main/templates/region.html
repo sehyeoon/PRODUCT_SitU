@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/region.css' %}" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+
+<div class="screen">
+    <div class="div">
+        <div class="frame">
+            <h1 class="mt-4"><span class="region-name">{{ region_name }}</span> 카페</h1>
+            <div class="card-container">
+                {% for cafe in cafes %}
+
+                <div class="card mb-3">
+                    <div class="card-content">
+                        <div class="card-image">
+                            <img src="{%static 'img/cafe_photo_1.png' %}" class="card-img" alt="{{ cafe.cafe_name }}" />
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{% url 'cafe_detail' cafe.cafe_id %}">{{ cafe.cafe_name }}</a>
+                            </h5>
+                            <p class="card-text">
+                                {{ cafe.cafe_time }}<br />
+                                잔여석: {{ cafe.empty_seats }}
+                            </p>
+                        </div>
+                        <a href="{% url 'seat_map' cafe.cafe_id %}" class="btn btn-sm btn-primary">자리잡기</a>
+                    </div>
+                </div>
+                {% empty %}
+                <p>해당 지역에 빈자리 있는 카페가 없습니다.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,197 @@
+/*카페파인 2층*/
+
+/*F2_seat_container*/
+
+body {
+    font-family: 'pretendard';
+}
+
+#floor2 .F2_seat_container {
+    display: flex;
+    background: #d9d9d9;
+    margin-top: 0;
+    width: 100%;
+    height: fit-content;
+    padding: 10px;
+    margin-bottom: 90px;
+}
+
+#floor2 .seat_container.right {
+    width: 500px;
+}
+
+#floor2 .first_container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: column;
+}
+
+#floor2 .top_container {
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 0;
+    left: 10px;
+    width: 390px;
+}
+
+#floor2 .middle_container {
+    height: 200px;
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: end;
+}
+
+#floor2 .bottom_container {
+    height: 90px;
+    width: 390px;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
+
+#floor2 .second_container {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#floor2 .third_container {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#floor2 .middle.single,
+#floor2 .middle.single2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#floor2 .middle.single .seat,
+#floor2 .middle.single2 .seat {
+    width: 50px;
+    height: 40px;
+}
+
+#floor2 .table {
+    width: 350px;
+    height: 50px;
+    border-radius: 10px;
+    color: #ff8244;
+    background-color: #ffffff;
+    border: 2px solid #ff8244;
+    font-family: 'pretendard';
+    text-align: center;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: -1.05px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#floor2 .seat_container.bottom {
+    height: 200px;
+}
+
+#floor2 .studyroom_container {
+    display: flex;
+    height: 90px;
+    width: 390px;
+    padding: 20px;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
+
+#floor2 .seat {
+    width: 100px; /* 네모박스 너비 */
+    height: 100px; /* 네모박스 높이 */
+    font-family: 'Pretendard-ExtraBold'; /* 폰트 설정 */
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
+#floor2 .chairs {
+    display: flex;
+}
+
+#floor2 .seat.chair {
+    width: 35px; /* 네모박스 너비 */
+    height: 17px; /* 네모박스 높이 */
+    border-radius: 10px;
+    background-color: #ffffff; /* 배경색 설정 */
+    border: 2px solid #ff8244;
+    margin: 2px;
+}
+
+#floor2 .seat.chairs.seat.chair {
+    background-color: #ffffff; /* 배경색 설정 */
+}
+
+#floor2 .seat.table {
+    font-family: 'pretendard extrabold';
+    background-color: #ffffff; /* 배경색 설정 */
+    border-radius: 10%;
+    border: 2px solid #ff8244;
+    width: 78px;
+    height: 40px;
+    border-radius: 10px;
+    margin: 0;
+    margin-left: 2px;
+}
+
+#floor2 .studyroom,
+#floor2 .box {
+    width: 120px;
+    height: 67px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    border: 2px solid #ff8244;
+    font-family: 'pretendard';
+    color: #ff8244;
+    text-align: center;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: -1.05px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
+#floor2 .box {
+    width: 67px;
+    height: 67px;
+}
+
+#floor2 .stair {
+    width: 150px;
+    height: 100px;
+    background-color: #4a4949;
+    color: white;
+    font-family: 'pretendard';
+    text-align: center;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: -1.05px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20px;
+    border-radius: 10px;
+}

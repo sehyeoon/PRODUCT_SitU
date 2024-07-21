@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% block title %}Seat_map{% endblock %} {% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/seat_map/seat_map_base.css' %}" />
+{% endblock %} {% block content %}
+<div class="title">
+    <div class="cafe_info">
+        <p class="cafe_time">{{ cafe.cafe_time }}</p>
+        <h1 class="cafe_name" id="cafeName" data-id="{{ cafe.id }}">{{ cafe.cafe_name }}</h1>
+    </div>
+    <div class="empty_seat">
+        <p>잔여석: {{ cafe.empty_seats }}</p>
+    </div>
+</div>
+<div class="floor-selection">
+    <button id="floor1Button" class="floor-button active" onclick="showFloor('floor1')">1층</button>
+    <button id="floor2Button" class="floor-button" onclick="showFloor('floor2')">2층</button>
+</div>
+<script src="{% static 'js/seat_map.js' %}"></script>
+{% endblock %} {% block footer %}
+<div id="popup">
+    <div id="popup-content">
+        <h1 id="seat-info">{{ seat.id }}번 자리 선택완료</h1>
+        <p>예약 후 15분 내로 카페 직원분의 인증을 받아야 예약이 확정됩니다!</p>
+        <form method="post" action="{{ reservation_complete }}">
+            {% csrf_token %}
+            <input type="hidden" name="seat_id" value="" id="popup-seat-id" />
+            <input type="hidden" name="number_of_people" value="1" />
+            <button id="reserveSeatButton" type="submit"><h3>자리 선택하기</h3></button>
+        </form>
+        <button id="popup-close" onclick="window.close()"></button>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+body {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.title {
+    background-color: #ffffff;
+    display: flex;
+    width: 100%;
+    padding: 20px 0;
+    width: 393px;
+}
+
+.cafe_info {
+    background-color: #ffffff;
+    width: 250px;
+}
+
+.cafe_time {
+    font-family: 'Pretendard-Regular';
+    font-weight: 400;
+    color: #373737;
+    font-size: 20px;
+    letter-spacing: -1.05px;
+    line-height: normal;
+    margin: 0;
+}
+
+.cafe_name {
+    width: 213px;
+    font-family: 'Pretendard-ExtraBold';
+    font-weight: 800;
+    color: #ff8244;
+    font-size: 48px;
+    letter-spacing: -3.84px;
+    top: 22px;
+    left: 9px;
+    margin: 0;
+}
+
+.empty_seat {
+    width: 104px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.empty_seat p {
+    font-family: 'Pretendard-Medium';
+    font-weight: 400;
+    font-size: 20px;
+    text-align: bottom;
+    letter-spacing: -1.4px;
+    line-height: normal;
+    white-space: nowrap;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+hr {
+    width: 393px;
+    height: 2px;
+    border: none;
+    background-color: #ff8244;
+    opacity: 0.5;
+}
+
+/* Styles for available seats */
+.seat[data-status='available'] .chair,
+.seat[data-status='available'] .table {
+    background-color: white; /* Chair and table color for available seats */
+}
+
+/* Styles for reserved seats */
+.seat[data-status='reserved'] .chair,
+.seat[data-status='reserved'] .table {
+    background-color: #ff8244; /* Chair and table color for reserved seats */
+}
+
+/* Styles for occupied seats */
+.seat[data-status='occupied'] .chair,
+.seat[data-status='occupied'] .table {
+    background-color: #333333; /* Chair and table color for occupied seats */
+    border-color: 2px solid #333333;
+    color: white;
+}

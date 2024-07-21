@@ -1,0 +1,59 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/user_profile.css' %}" />
+
+<div class="screen">
+    <div class="profile-container">
+        <h2 class="mt-4">반갑습니다! {{user.name}}님</h2>
+        <div class="profile-info"></div>
+        <div class="reservations">
+            <h3>현재 예약</h3>
+            {% if current_reservations %} {% for reservation in current_reservations %}
+            <div class="card-content">
+                <div class="card-image">
+                    <img src="{% static 'img/cafe_photo_1.png' %}" class="card-img" alt="{{ cafe.cafe_name }}" />
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'cafe_detail' reservation.cafe_id %}">{{ reservation.cafe.cafe_name }}</a>
+                    </h5>
+                    <p class="card-text">
+                        {{ reservation.cafe.cafe_time }}<br />
+                        좌석번호: {{ reservation.seat.seats_no }}<br />
+                        상태: {{ reservation.seat.get_seat_status_display }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %} {% else %}
+            <p>현재 예약이 없습니다.</p>
+            {% endif %}
+
+            <div class="separator"></div>
+            <h3>과거 예약 기록</h3>
+            {% if past_reservations %}
+            <ul>
+                {% for reservation in past_reservations %}
+                <li>{{ reservation.cafe.cafe_name }} - 좌석 번호: {{ reservation.seat.seats_no }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>과거 예약 기록이 없습니다.</p>
+            {% endif %}
+        </div>
+        <div class="separator"></div>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+            <div class="profile-actions">
+                <a href="{% url 'account_change_password' %}" class="btn btn-secondary">비밀번호 변경</a>
+            </div>
+            <button type="submit" class="btn btn-primary">로그아웃</button>
+        </form>
+        {% else %}
+        <div class="button-container">
+            <a href="{% url 'user_login' %}" class="btn btn-primary">로그인</a>
+            <a href="{% url 'user_signup' %}" class="btn btn-secondary">회원가입</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>카페 로그인</title>
+        <link rel="stylesheet" href="{% static 'css/cafe_login.css' %}" />
+    </head>
+    <body>
+        <div class="screen">
+            <div class="div">
+                <div class="overlap">
+                    <div class="text-wrapper">SitU</div>
+                    <div class="text-wrapper-2">스마트한 우리가게 관리</div>
+                </div>
+                <div class="overlap-group">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <label for="cafe_id" class="text-wrapper-3">업체코드 :</label>
+                            <input type="text" id="cafe_id" name="cafe_id" placeholder="업체코드" class="rectangle" />
+                        </div>
+                        <div class="input-group">
+                            <label for="cafe_pw" class="text-wrapper-4">비밀번호 :</label>
+                            <input
+                                type="password"
+                                id="cafe_pw"
+                                name="cafe_pw"
+                                placeholder="비밀번호"
+                                class="rectangle-2"
+                            />
+                        </div>
+                        <div class="overlap-2">
+                            <button type="submit" class="rectangle-3">
+                                <div class="text-wrapper-5">로그인하기</div>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

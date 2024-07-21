@@ -1,0 +1,340 @@
+body {
+    margin: 10%;
+    font-family: 'Pretendard';
+}
+
+/*상단*/
+.title {
+    background-color: #ffffff;
+    display: flex;
+    align-items: top;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px 0;
+    width: 570px;
+}
+
+.cafe_info {
+    background-color: #ffffff;
+    width: 250px;
+}
+
+.cafe_time {
+    font-family: 'Pretendard-Regular';
+    font-weight: 400;
+    color: #373737;
+    font-size: 20px;
+    letter-spacing: -1.05px;
+    line-height: normal;
+    margin: 0;
+    margin-left: 5px;
+}
+
+.cafe_name {
+    width: 213px;
+    font-family: 'Pretendard-ExtraBold';
+    font-weight: 800;
+    color: #ff8244;
+    font-size: 48px;
+    letter-spacing: -3.84px;
+    top: 22px;
+    left: 9px;
+    margin: 0;
+}
+
+.empty_seat {
+    width: 104px;
+    display: flex;
+    flex-direction: column;
+}
+
+.empty_seat p {
+    font-family: 'Pretendard-Regular';
+    font-weight: 800;
+    color: #373737;
+    font-size: 18px;
+    letter-spacing: -1.05px;
+    line-height: normal;
+    margin: 0;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    color: #333333;
+}
+
+.floor-selection {
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+}
+
+hr {
+    background: rgba(255, 130, 68, 0.5);
+    height: 5px;
+    width: 570px;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.F1_inner,
+.F2_inner {
+    display: flex;
+    gap: 20px;
+}
+
+/*유저측 좌석 예약요청*/
+
+.confirm-reservation-section {
+    width: 500px;
+}
+
+.reserved-seat {
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    height: 150px;
+    border: 2px solid #ff8244;
+    border-radius: 10px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.confirm-reservation-section h2 {
+    text-align: center;
+    font-family: 'Pretendard-ExtraBold';
+    font-weight: 800;
+    color: #ff8244;
+    font-size: 30px;
+    letter-spacing: -3.84px;
+    top: 22px;
+    left: 9px;
+    margin: 0;
+}
+
+.confirm-reservation-section h3 {
+    text-align: center;
+    font-family: 'Pretendard';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 22px; /* 110% */
+    letter-spacing: -1px;
+    color: #4a4a4a;
+}
+
+.btn_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+form {
+    display: flex;
+    align-items: center;
+}
+.button_success {
+    background-color: #ff8244;
+    color: #ffffff;
+    border: 2px solid #ff8244;
+    display: flex;
+    padding: 5px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex: 1 0 0;
+    align-self: center;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 10px;
+    font-family: 'pretendard';
+}
+
+.button_success:hover {
+    background-color: #e67340;
+    border-color: #e67340; /* 호버 시 테두리 색상 변경 */
+}
+
+.button_cancel {
+    background-color: #ffffff;
+    color: #ff8244;
+    border: 2px solid #ff8244;
+    display: flex;
+    padding: 5px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex: 1 0 0;
+    align-self: stretch;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 10px;
+    font-family: 'pretendard';
+}
+
+#popup {
+    position: fixed;
+    top: 27%;
+    right: 20px; /* 오른쪽 여백 조정 */
+    transform: translateY(-50%); /* 세로 중앙 정렬 */
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 383px;
+    height: auto;
+    max-height: calc(100vh - 40px); /* 상하 여백 고려 */
+    overflow-y: auto;
+    display: none;
+    transition: opacity 0.3s ease; /* 부드러운 표시/숨김 효과 */
+    opacity: 0;
+}
+
+#popup.active {
+    display: block;
+    opacity: 1;
+}
+
+/* 나머지 CSS 스타일은 그대로 유지 */
+
+#popup-content {
+    margin-bottom: 20px;
+    color: #333333;
+    font-family: 'Pretendard';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: normal;
+    letter-spacing: -1.28px;
+    text-align: start;
+}
+
+#popup-content h1 {
+    font-family: 'Pretendard';
+    display: flex;
+    color: #ff8244;
+    font-size: 27px;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: -2.16px;
+    text-align: start;
+}
+
+#popup-content p {
+    margin-top: 2px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+#seat-info {
+    display: flex;
+    color: #ff8244;
+    text-align: start;
+    justify-content: center;
+}
+
+#popup-close {
+    position: absolute;
+    top: 10px; /* Adjust top spacing as needed */
+    right: 10px; /* Adjust right spacing as needed */
+    cursor: pointer;
+    color: #dddddd;
+    font-size: 15px; /* Adjust font size as needed */
+    border: none;
+}
+
+#popup-close:before {
+    content: '\00D7'; /* Unicode 'x' character */
+}
+
+/*층수선택*/
+
+.floor-selection {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.floor-button {
+    background-color: #ffffff;
+    color: #ff8244;
+    border: 2px solid #ff8244;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    font-family: 'pretendard';
+}
+
+.floor-button.active {
+    background-color: #ff8244;
+    color: #ffffff;
+    border: 2px solid #ff8244;
+}
+
+.floor-button:hover {
+    background-color: #ff8244;
+    color: #ffffff;
+}
+
+.floor-content {
+    display: none;
+}
+
+/* Styles for available seats */
+.seat[data-status='available'] .chair,
+.seat[data-status='available'] .table {
+    background-color: white; /* Chair and table color for available seats */
+    border-color: 2px solid #ff8244;
+    color: #ff8244;
+}
+
+.seat[data-status='requesting'] .chair,
+.seat[data-status='requesting'] .table {
+    background-color: #ffffff; /* Chair and table color for occupied seats */
+    border-color: 2px solid #4a4a4a;
+    color: #4a4a4a;
+}
+
+/* Styles for reserved seats */
+.seat[data-status='reserved'] .chair,
+.seat[data-status='reserved'] .table {
+    background-color: #ff8244; /* Chair and table color for reserved seats */
+    color: white;
+}
+
+/* Styles for occupied seats */
+.seat[data-status='occupied'] .chair,
+.seat[data-status='occupied'] .table {
+    background-color: #4a4a4a; /* Chair and table color for occupied seats */
+    border-color: 2px solid #4a4a4a;
+    color: rgb(255, 255, 255);
+}
+
+/*페이지 이동 버튼 */
+.btn {
+    color: white;
+    font-family: 'pretendard';
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+}
+.btn:hover {
+    background-color: #4a4949;
+}

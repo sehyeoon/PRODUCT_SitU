@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SitU - 당신을 위해 남겨둔 자리</title>
+        <link rel="stylesheet" href="{% static 'css/start.css' %}" />
+        <link
+            rel="stylesheet"
+            as="style"
+            crossorigin
+            href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css"
+        />
+    </head>
+    <body>
+        <div class="background-overlay"></div>
+        <div class="container">
+            <h1 class="title">SitU</h1>
+            <p class="subtitle">당신을 위해 남겨둔 자리</p>
+        </div>
+
+        <script>
+            setTimeout(function () {
+                document.body.classList.add('fade-out');
+                setTimeout(function () {
+                    window.location.href = "{% url 'home' %}";
+                }, 1500);
+            }, 1500);
+        </script>
+    </body>
+</html>
