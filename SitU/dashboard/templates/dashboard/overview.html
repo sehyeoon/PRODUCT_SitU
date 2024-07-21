@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>카페 대시보드</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/dashboard_overview.css' %}" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <!--페이지 이동 버튼-->
+        <div class="pagebutton">
+            <button class="btn" onclick="location.href='{% url 'seat_overview' cafe.id %}'">
+                좌석관리 페이지로 이동
+            </button>
+        </div>
+
+        <div class="dashboard">
+            <div class="title">
+                <div class="cafe_info">
+                    <p class="cafe_time">안녕하세요 사장님!</p>
+                    <h1 class="cafe_name">{{ cafe.cafe_name }}</h1>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <h2>최근 일주일 요일별 예약 현황</h2>
+                    <hr />
+                    <canvas id="weeklyReservationChart"></canvas>
+                </div>
+                <div class="stat">
+                    <h2>오늘 시간대별 예약 현황</h2>
+                    <hr />
+                    <canvas id="visitTimeChart"></canvas>
+                </div>
+                <div class="stat">
+                    <h2>좋아요 누른 고객 수</h2>
+                    <hr />
+                    <p id="favoriteCount">{{ favorite_count }}명</p>
+                </div>
+                <div class="stat">
+                    <h2>오늘 예약 생성 수</h2>
+                    <hr />
+                    <p id="todayReservationsCount">{{ today_reservations_count }}건</p>
+                </div>
+            </div>
+        </div>
+        <script>
+            var ctx = document.getElementById('visitTimeChart').getContext('2d');
+
+            var hours = {{ hours|safe }};
+            var counts = {{ counts|safe }};
+            var maxHour = {{ max_hour|default:"null" }};
+
+            var labels = ['10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM', '9 PM', '10 PM'];
+
+            var backgroundColors = counts.map(function(count, index) {
+                return (hours[index] === maxHour) ? 'rgba(255, 130, 68, 0.2)' :'rgba(255, 130, 68, 0.2)';
+            });
+
+            var borderColors = counts.map(function(count, index) {
+                return (hours[index] === maxHour) ? 'rgba(255, 130, 68, 1)' : 'rgba(255, 130, 68, 1)';
+            });
+
+            var visitTimeChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Reservations by Hour',
+                        data: counts,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            var weeklyCtx = document.getElementById('weeklyReservationChart').getContext('2d');
+                var daysOfWeek = {{ days_of_week|safe }};
+                var weeklyCounts = {{ counts|safe }};
+
+                var weeklyReservationChart = new Chart(weeklyCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: daysOfWeek,
+                        datasets: [{
+                            label: 'Reservations per Day',
+                            data: weeklyCounts,
+                            backgroundColor: 'rgba(255, 130, 68, 0.2)',
+                            borderColor: 'rgba(255, 130, 68, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+            });
+        </script>
+
+        <script src="{% static 'js/dashboard_overview.js' %}"></script>
+    </body>
+</html>
