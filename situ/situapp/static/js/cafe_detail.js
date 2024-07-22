@@ -21,6 +21,7 @@ $(document).ready(function () {
     $('#likeButton').click(function (e) {
         e.preventDefault();
         var cafeId = $(this).data('cafe-id');
+        var likeButton = $(this);
 
         $.ajax({
             url: '/like_cafe/' + cafeId + '/',
@@ -29,7 +30,7 @@ $(document).ready(function () {
                 'X-CSRFToken': getCookie('csrftoken'),
             },
             success: function (response) {
-                // 성공 시 처리
+                likeButton.attr('src', "{% static 'images/HeartFilled.svg' %}");
             },
             error: function (xhr, errmsg, err) {
                 console.log('AJAX error', errmsg, err);

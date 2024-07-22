@@ -11,6 +11,7 @@ from datetime import timedelta
 from django.db.models import Count
 import json
 import pytz
+import threading
 from django.core.serializers.json import DjangoJSONEncoder
 
 # start
@@ -122,6 +123,7 @@ def reservation_create(request, cafe_id, seat_id):
         seat.seat_status = 'requesting'
         seat.save()
     
+        threading.Timer(900, cancel_reservation, [reservation.id]).start()
 
         return redirect('reservation_success.html')
 

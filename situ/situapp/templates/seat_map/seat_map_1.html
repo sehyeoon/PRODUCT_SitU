@@ -267,10 +267,22 @@
                 <div class="seat_container right">
                     <div class="first_container ">
                             <div class="top_container">
-                                <div class="box">4인석</div> 
-                                <div class="box">4인석</div> 
+                                {% for seat in seats %} {% if seat.seats_no == 21 %}
+                                <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">   
+                                    <div class="box">4인석</div></div>
+                            {% endif %} {% endfor %}
+                            {% for seat in seats %} {% if seat.seats_no == 21 %}
+                            <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">   
+                                <div class="box">4인석</div></div>
+                            {% endif %} {% endfor %}  
+                            {% for seat in seats %} {% if seat.seats_no == 21 %}
+                            <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">   
                                 <div class="studyroom">스터디룸</div> 
+                            {% endif %} {% endfor %}
+                            {% for seat in seats %} {% if seat.seats_no == 21 %}
+                            <div class="seat" id="{{ seat.id }}" data-status="{{ seat.seat_status }}">   
                                 <div class="studyroom">스터디룸</div> 
+                            {% endif %} {% endfor %} 
                             </div>
                             <div class="middle_container">
                                 <div class="middle single">

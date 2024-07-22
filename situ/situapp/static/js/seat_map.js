@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var closeButton = document.getElementById('popup-close');
     var selectedSeatId = '';
 
-    document.querySelectorAll('.seat').forEach(function (seat) {
+    document.querySelectorAll('.seat', '.box').forEach(function (seat) {
         seat.addEventListener('click', function () {
             var seatId = this.id;
             var seatNo = this.querySelector('.seat.table').textContent;

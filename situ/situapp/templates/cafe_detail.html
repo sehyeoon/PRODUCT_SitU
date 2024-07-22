@@ -14,11 +14,12 @@
             <p class="cafe_time">{{ cafe.cafe_time }}</p>
             <h1 class="cafe_name">{{ cafe.cafe_name }}</h1>
         </div>
-        <div class="heart_seats">
-            <img src="{% static 'images/Heart.png' %}" class="heart-icon" id="likeButton" data-cafe-id="{{ cafe.id }}">
+        <!--이미지 수정-->
+        <div class="heart_seats"> 
+            <img src="{% static 'images/Heart.svg' %}" class="heart-icon" id="likeButton" data-cafe-id="{{ cafe.id }}">
             <div class="empty_seat">
             <p>잔여석: {{ cafe.empty_seats }} </p>
-        </div>
+            </div>
     </div>
     </div>
     <div class="location">
