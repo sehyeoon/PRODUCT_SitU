@@ -76,3 +76,25 @@ body {
     font-weight: 700;
     color: #ff8244;
 }
+
+/*페이지 이동 버튼 */
+
+.btn {
+    color: white;
+    font-family: 'pretendard';
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+}
+.btn:hover {
+    background-color: #4a4949;
+}

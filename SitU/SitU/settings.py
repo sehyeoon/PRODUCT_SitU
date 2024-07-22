@@ -159,3 +159,9 @@ ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'user_id'
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

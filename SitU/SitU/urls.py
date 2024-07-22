@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from main import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.startview, name='start'),
@@ -29,4 +31,4 @@ urlpatterns = [
     path('login/cafe/', views.cafe_login, name='cafe_login'),
     path('check_active_reservation/', views.check_active_reservation, name='check_active_reservation'),
     path('cafe/<int:cafe_id>/dashboard', views.dashboard_overview, name='dashboard_overview'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

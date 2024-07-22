@@ -9,7 +9,17 @@
     <div class="card mb-3">
         <div class="card-content">
             <div class="card-image">
-                <img src="{%static 'img/cafe_photo_1.png'%}" class="card-img" alt="{{ favorite.cafe.cafe_name }}" />
+                {% if favorite.cafe.cafe_photo %} {% if favorite.cafe.cafe_photo.url %}
+                <img src="{{ favorite.cafe.cafe_photo.url }}" class="card-img" alt="{{ favorite.cafe.cafe_name }}" />
+                {% else %}
+                <img src="{{ favorite.cafe.cafe_photo }}" class="card-img" alt="{{ favorite.cafe.cafe_name }}" />
+                {% endif %} {% else %}
+                <img
+                    src="{% static 'images/default_cafe.jpg' %}"
+                    class="card-img"
+                    alt="{{ favorite.cafe.cafe_name }}"
+                />
+                {% endif %}
             </div>
             <div class="card-body">
                 <h5 class="card-title">
@@ -20,7 +30,7 @@
                     잔여석: {{ favorite.cafe.empty_seats }}
                 </p>
                 <a
-                    href="#"
+                    href="{% url 'seat_map' favorite.cafe.id %}"
                     class="btn btn-sm btn-primary reserve-button"
                     data-cafe-id="{{ favorite.cafe.id }}"
                     data-user-profile-url="{% url 'user_profile' user.id %}"

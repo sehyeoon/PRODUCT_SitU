@@ -8,11 +8,16 @@
             <h1 class="mt-4"><span class="region-name">{{ region_name }}</span> 카페</h1>
             <div class="card-container">
                 {% for cafe in cafes %}
-
                 <div class="card mb-3">
                     <div class="card-content">
                         <div class="card-image">
-                            <img src="{%static 'img/cafe_photo_1.png' %}" class="card-img" alt="{{ cafe.cafe_name }}" />
+                            {% if cafe.cafe_photo %} {% if cafe.cafe_photo.url %}
+                            <img src="{{ cafe.cafe_photo.url }}" alt="{{ cafe.cafe_name }} photo" />
+                            {% else %}
+                            <img src="{{ cafe.cafe_photo }}" alt="{{ cafe.cafe_name }} photo" />
+                            {% endif %} {% else %}
+                            <img src="{% static 'images/default_cafe.jpg' %}" alt="{{ cafe.cafe_name }} photo" />
+                            {% endif %}
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">

@@ -10,6 +10,13 @@
         <link rel="stylesheet" href="{% static 'css/seat_map/seat_map_1_2.css' %}" />
     </head>
     <body>
+        <!--페이지 이동 버튼-->
+        <div class="pagebutton">
+            <button class="btn" onclick="location.href='{% url 'dashboard_overview' cafe.id %}'">
+                가게현황 페이지로 이동
+            </button>
+        </div>
+
         <div class="title">
             <div class="cafe_info">
                 <p class="cafe_time">안녕하세요 사장님!</p>
@@ -247,7 +254,7 @@
                             {% csrf_token %}
                             <button type="submit" class="button_success">예약 승인</button>
                         </form>
-                        <form method="post" action="{% url 'cancel_reservation' reservation.seat.id %}">
+                        <form method="post" action="{% url 'cancel_reservation' reservation.id %}">
                             {% csrf_token %}
                             <button type="submit" class="button_cancel">예약 취소</button>
                         </form>
@@ -572,11 +579,11 @@
                     {% for reservation in reservations %} {% if reservation.seat.seat_status == 'requesting' %}
                     <div class="reserved-seat">
                         <h3>{{ reservation.user.name }}님의 {{ reservation.seat.seats_no }}번 좌석 예약 요청</h3>
-                        <form method="post" action="{% url 'confirm_reservation' reservation.id reservation.seat.id %}">
+                        <form method="post" action="{% url 'confirm_reservation' reservation.id reservation.seat.id%}">
                             {% csrf_token %}
                             <button type="submit" class="button_success">예약 승인</button>
                         </form>
-                        <form method="post" action="{% url 'cancel_reservation' reservation.seat.id %}">
+                        <form method="post" action="{% url 'cancel_reservation' reservation.id %}">
                             {% csrf_token %}
                             <button type="submit" class="button_cancel">예약 취소</button>
                         </form>
@@ -585,6 +592,7 @@
                 </div>
             </div>
         </div>
+
         <script src="{% static 'js/seat_overview.js' %}"></script>
     </body>
 </html>
