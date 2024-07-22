@@ -193,3 +193,13 @@ body {
     margin-left: 20px;
     border-radius: 10px;
 }
+
+/*변경된부분-*/
+.left {
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.left2 {
+    margin-top: 60px;
+}

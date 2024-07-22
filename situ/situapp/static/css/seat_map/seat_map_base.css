@@ -221,7 +221,9 @@ hr {
 
 /* Available 상태의 좌석 스타일 */
 #floor1 .seat[data-status='available'] .chair,
-#floor1 .seat[data-status='available'] .table {
+#floor1 .seat[data-status='available'] .table,
+#floor1 .seat[data-status='available'] .box,
+#floor1 .seat[data-status='available'] .studyroom {
     background-color: white; /* 의자 및 테이블 색상 (available 상태) */
     color: #ff8244; /* 글씨 색상 */
     border: 2px solid #ff8244; /* 테두리 색상 (선택적) */
@@ -244,7 +246,13 @@ hr {
 #floor2 .seat[data-status='requesting'] .chair,
 #floor2 .seat[data-status='occupied'] .table,
 #floor2 .seat[data-status='reserved'] .table,
-#floor2 .seat[data-status='requesting'] .table {
+#floor2 .seat[data-status='requesting'] .table,
+#floor2 .seat[data-status='occupied'] .box,
+#floor2 .seat[data-status='reserved'] .box,
+#floor2 .seat[data-status='requesting'] .box,
+#floor2 .seat[data-status='occupied'] .studyroom,
+#floor2 .seat[data-status='reserved'] .studyroom,
+#floor2 .seat[data-status='requesting'] .studyroom {
     background-color: #4a4949; /* 의자 및 테이블 색상 (occupied, reserved, requesting 상태) */
     border: 2px solid #4a4949; /* 테두리 색상 */
     color: white; /* 글씨 색상 */
