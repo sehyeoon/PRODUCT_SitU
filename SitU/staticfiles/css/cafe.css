@@ -1,0 +1,245 @@
+.title {
+    background-color: #ffffff;
+    display: flex;
+    width: 100%;
+    padding: 20px 0;
+    max-width: 480px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    position: relative; /* 부모 요소에 상대적으로 위치 지정 */
+}
+
+.cafe_info {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 480px;
+}
+
+.cafe_time {
+    font-family: 'Pretendard-Regular';
+    font-weight: 400;
+    color: #373737;
+    font-size: 15px;
+    line-height: normal;
+    margin: 0;
+    letter-spacing: -1.6px;
+}
+
+.cafe_name {
+    width: 100%;
+    max-width: 500px;
+    font-family: 'Pretendard-ExtraBold';
+    font-weight: 800;
+    color: #ff8244;
+    font-size: 40px;
+    letter-spacing: -3.84px;
+    margin: 0;
+}
+
+.empty_seat {
+    width: 100%;
+    max-width: 104px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    letter-spacing: -1.6px;
+    color: #ff8244;
+    font-family: 'Pretendard';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    letter-spacing: -1.4px;
+}
+
+.empty_seat p {
+    color: #333;
+    text-align: right;
+    font-family: 'Pretendard';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -1.4px;
+}
+
+.like_button {
+    position: absolute;
+    top: 20px; /* 상단에서 20px 아래로 위치 */
+    right: 20px; /* 우측에서 20px 왼쪽으로 위치 */
+}
+
+.like_button img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+hr {
+    width: 100%;
+    max-width: 480px;
+    height: 2px;
+    border: none;
+    background-color: #ff8244;
+    opacity: 0.5;
+}
+
+.location {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    position: relative;
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.map {
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    aspect-ratio: 360 / 163; /* 가로 세로 비율 유지 */
+    top: 0;
+    left: 0;
+    border: #ff8244 solid 2px;
+    border-radius: 10px;
+}
+
+.cafe_map {
+    border: #ff8244 solid 2px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 460px;
+    height: 200px;
+    margin: auto;
+    margin-top: 8px;
+    padding: auto;
+}
+
+.location p {
+    font-family: 'Pretendard-Light';
+    font-weight: 300;
+    color: #333333;
+    font-size: 12px;
+    letter-spacing: -0.7px;
+    line-height: normal;
+    margin-left: 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.image {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    position: relative;
+    padding: 20px 0;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.detail_image {
+    position: relative;
+    display: flex;
+    left: -3px;
+    width: 375px;
+    height: auto;
+    aspect-ratio: 352 / 147; /* 가로 세로 비율 유지 */
+    margin: 0 auto;
+    justify-content: space-around;
+    margin-left: 0px;
+}
+
+.cafe_photo {
+    width: 115px;
+    height: 115px;
+    border: #ff8244 solid 2px;
+    border-radius: 10px;
+}
+
+h3 {
+    font-family: 'Pretendard-Black';
+    font-weight: 900;
+    color: #333333;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.info {
+    background-color: #ffffff;
+    margin-top: 0;
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    position: relative;
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0 auto;
+    left: 0px;
+    margin-bottom: 50px;
+}
+
+.detail_info {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    height: fit-content;
+    aspect-ratio: 340 / 147; /* 가로 세로 비율 유지 */
+    border: #ff8244 solid 2px;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 150px;
+}
+
+.detail_info p {
+    font-family: 'Pretendard-Regular';
+    font-weight: 400;
+    color: #373737;
+    font-size: 15px;
+    letter-spacing: -1.05px;
+    line-height: normal;
+}
+
+.reserve_button {
+    background-color: #333333;
+    width: 100%;
+    max-width: 393px;
+    height: 46px;
+    border-radius: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 90px;
+    left: 50%; /* 화면의 가로 중앙에 위치 */
+    transform: translateX(-50%); /* 가로 중앙 정렬 보정 */
+    align-content: center;
+}
+
+.reserve_button h1 {
+    font-family: 'Pretendard-Black';
+    height: 46px;
+    line-height: 46px;
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 18px;
+    align-self: center;
+}
+
+body {
+    overflow-y: auto;
+    height: auto;
+}
+
+h1 {
+    margin: 0px;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}

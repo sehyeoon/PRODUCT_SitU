@@ -1,0 +1,110 @@
+/* region.css */
+
+h1 {
+    font-size: 32px;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.card {
+    width: 480px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-content {
+    display: flex;
+    position: relative;
+}
+
+.card-image {
+    flex: 0 0 25%;
+    padding: 1%;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-body {
+    flex: 1;
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 14px;
+    color: #757575;
+}
+
+.btn-primary {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background-color: #ff8244;
+    border: none;
+}
+
+.btn-outline-primary {
+    border: 1px solid #ff8244;
+    color: #ff8244;
+}
+
+.btn-outline-primary:hover {
+    background-color: #ff8244;
+    color: white;
+}
+
+.region-name {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 800; /* ExtraBold */
+    color: #ff8244;
+}
+
+.mt-4 {
+    width: 480px;
+}
+
+@media (max-width: 480px) {
+    .card,
+    .mt-4 {
+        width: 100%;
+    }
+}
+
+.btn-primary:hover {
+    background-color: #e86a2d; /* #ff8244보다 약간 더 어두운 색상 */
+}
+
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+    background-color: #e86a2d !important;
+    border-color: #e86a2d !important;
+}
+
+div.container.mt-4.screen {
+    padding: 0px;
+}
+
+div.container1 {
+    padding: 0px;
+}
+
+.screen {
+    display: flex;
+    justify-content: center;
+}

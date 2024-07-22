@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-q^ecpiqbweb$ssan5f-@d&gq*ls8u(rd67wz1c$5rb0e*xll_v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['13.124.192.64', '.amazonaws.com', '127.0.0.1']
 
@@ -83,7 +83,7 @@ DATABASES = {
         'NAME': 'situ',
         'USER': 'root',
         'PASSWORD': '12340000',
-        'HOST': '3.36.127.40',
+        'HOST': '13.124.192.64',
         'PORT': '3306',
     }
 }

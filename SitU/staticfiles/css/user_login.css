@@ -1,0 +1,105 @@
+.screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+}
+
+.group,
+.overlap-wrapper,
+.group-wrapper {
+    background-color: #333333;
+    color: white;
+    border: none;
+    border-radius: 15px;
+
+    margin-bottom: 5px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none; /* 밑줄 제거 */
+    display: inline-block; /* 링크를 블록 레벨 요소로 만듦 */
+}
+
+.group-wrapper {
+    background-color: #adadad;
+    color: #333333;
+}
+
+a.overlap-wrapper,
+a.group-wrapper {
+    color: white;
+    text-decoration: none;
+}
+
+/* 호버 상태에서도 스타일 유지 */
+a.overlap-wrapper:hover,
+a.group-wrapper:hover {
+    color: white;
+    text-decoration: none;
+}
+
+/* '비회원으로 이용하기' 버튼의 텍스트 색상 유지 */
+.group-wrapper,
+.group-wrapper:hover {
+    color: #333333;
+}
+
+.text-wrapper,
+.text-wrapper-2 {
+    text-align: center;
+    align-items: center;
+    align-content: center;
+}
+
+.rectangle,
+.rectangle-2 {
+    border-radius: 30px;
+}
+
+.text-wrapper {
+    font-weight: 900;
+    font-size: 80px;
+    height: 100px;
+}
+
+.text-wrapper-2 {
+    color: #ff8244;
+    font-weight: 500;
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+.error-messages {
+    background-color: #ffebee;
+    border: 1px solid #ffcdd2;
+    border-radius: 4px;
+    color: #b71c1c;
+    margin-bottom: 15px;
+    padding: 10px;
+    text-align: center;
+}
+
+.error-messages p {
+    margin: 0;
+}
+
+.social-login-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+button {
+    border: transparent;
+    background-color: transparent;
+}
+
+.kakao-login {
+    width: 10rem;
+}
+
+.naver-login {
+    width: 9.2rem;
+}
